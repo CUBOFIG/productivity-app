@@ -1,0 +1,139 @@
+.sidebar {
+  overflow: hidden;
+
+  .sidebar-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 1.5rem;
+
+    &__link {
+      cursor: pointer;
+    }
+
+    & ul {
+      padding: 0;
+    }
+
+    & li {
+      margin-top: 2.2rem;
+      list-style: none;
+    }
+
+    @include responsive(tablet) {
+      margin-left: 0;
+
+      & .header-item p {
+        display: none;
+      }
+    }
+
+    @include responsive(desktop) {
+      margin-left: 1.5rem;
+
+      & .header-item p {
+        display: block;
+      }
+    }
+  }
+
+  &__format {
+    background: rgb(226, 233, 235);
+    border-radius: 0 0.5rem 0.5rem 0;
+    color: white;
+    margin-left: -150%;
+    min-height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: all 0.5s;
+    width: 50%;
+    z-index: 1000;
+
+    @include responsive(tablet) {
+      position: static;
+      margin: 0;
+    }
+  }
+
+  &__overlay {
+    overflow: hidden;
+    height: 120%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+
+    @include responsive(tablet) {
+      display: none !important;
+    }
+  }
+
+  &__is-open-overlay {
+    background-color: rgba(13, 13, 13, 0.53);
+  }
+
+  &__is-open {
+    margin-left: 0;
+  }
+
+  & ul li svg {
+    color: #646cff;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+
+    @include responsive(tablet) {
+      margin-right: 0;
+    }
+
+    @include responsive(desktop) {
+      margin-right: 0.5rem;
+    }
+  }
+
+  & .header-item {
+    display: flex;
+    align-items: center;
+
+    @include responsive(tablet) {
+      justify-content: center;
+    }
+
+    @include responsive(desktop) {
+      justify-content: flex-start;
+    }
+  }
+
+  .sidebar_toggle {
+    position: absolute;
+    top: 20px;
+    left: 32px;
+
+    & > svg {
+      width: 23px;
+      height: 23px;
+      color: #646cff;
+      cursor: pointer;
+    }
+
+    @include responsive(tablet) {
+      display: none;
+    }
+  }
+
+  @include responsive(tablet) {
+    & > div {
+      width: 50px;
+      margin-right: 0;
+    }
+  }
+
+  @include responsive(desktop) {
+    & > div {
+      width: 225px;
+      margin-right: 0;
+    }
+  }
+}

@@ -1,0 +1,19 @@
+$breakpoint-tablet: 500px;
+$breakpoint-desktop: 992px;
+$breakpoint-large: 1200px;
+
+@mixin responsive($device) {
+  @if $device == tablet {
+    @media only screen and (min-width: $breakpoint-tablet) {
+      @content;
+    }
+  } @else if $device == desktop {
+    @media only screen and (min-width: $breakpoint-desktop) {
+      @content;
+    }
+  } @else if $device == large {
+    @media only screen and (min-width: $breakpoint-large) {
+      @content;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.header-item {
+  @include responsive(tablet) {
+    p {
+      display: none;
+    }
+  }
+}

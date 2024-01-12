@@ -1,0 +1,45 @@
+.drag-list {
+  background-color: rgb(226, 233, 235);
+  width: 100%;
+  border-radius: 0.6rem;
+  color: rgb(28, 28, 28);
+  padding: 0.5rem;
+  margin-top: 2rem;
+  font-size: clamp(12px, 3vw, 16px);
+  height: 100%;
+
+  td {
+    padding: 1rem;
+  }
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  @include responsive(tablet) {
+    margin-top: 0;
+  }
+}
+
+tbody {
+  height: 100%;
+  overflow-y: auto;
+  display: block;
+}
+
+td {
+  padding: 1rem;
+  white-space: nowrap;
+}
+
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed; /* Esto es necesario para que las celdas no cambien de tamaño */
+}
+
+thead {
+  width: calc(100%); /* ajustar según el ancho de la barra de desplazamiento */
+}
