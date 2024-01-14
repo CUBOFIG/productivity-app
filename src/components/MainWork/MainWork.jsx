@@ -3,35 +3,22 @@ import { FaPlay, FaPause } from 'react-icons/fa';
 import { FaCircleCheck } from 'react-icons/fa6';
 import { MdDelete } from 'react-icons/md';
 import Button from '../Button/Button';
-
-const useTimer = (initialTime = 1000) => {
-  const [time, setTime] = useState(initialTime);
-  const [timerOn, setTimerOn] = useState(false);
-
-  useEffect(() => {
-    let interval = null;
-
-    timerOn
-      ? (interval = setInterval(
-          () => setTime((prevTime) => prevTime - 1),
-          1000,
-        ))
-      : clearInterval(interval);
-
-    return () => clearInterval(interval);
-  }, [timerOn]);
-
-  return { time, setTime, timerOn, setTimerOn };
-};
+import { useDispatch, useSelector } from 'react-redux';
+import useTimer from '../../hooks/useTimer';
 
 const MainWork = () => {
-  const { time, setTime, timerOn, setTimerOn } = useTimer(1000);
+  const dispatch = useDispatch();
+  const currentTask = useSelector((state) => state.global.currentTask);
+  const { time, setTime, timerOn, setTimerOn, isComplete } = useTimer();
 
   const startTimer = () => setTimerOn(true);
   const pauseTimer = () => setTimerOn(false);
-  const resetTimer = (logMessage) => {
+  const resetTimer = (logMessage) => {};
+
+  const onCompleteTask = () => {
     setTime(0);
     setTimerOn(false);
+    dispatch({ type: 'global/completeTask', payload: currentTask.id });
   };
 
   const formatTime = () => {
@@ -44,10 +31,29 @@ const MainWork = () => {
       .join(':');
   };
 
+  useEffect(() => {
+    console.log('currentTask', currentTask);
+    if (!currentTask?.id) return;
+
+    const data = {
+      id: currentTask.id,
+      description: currentTask.description,
+      duration:
+        currentTask?.durationChoice?.duration || currentTask.customDuration,
+    };
+
+    setTime(data.duration);
+  }, [currentTask]);
+
+  useEffect(() => {
+    if (isComplete)
+      dispatch({ type: 'global/completeTask', payload: currentTask.id });
+  }, [isComplete]);
+
   return (
     <section className="main-work">
       <header>
-        <h1>Conseguir las tareas completas para analizarlassss</h1>
+        <h1>{currentTask?.description || ''}</h1>
         <p>{formatTime()}</p>
       </header>
       <div>
@@ -60,7 +66,7 @@ const MainWork = () => {
           text="COMPLETE"
           icon={<FaCircleCheck />}
           className="mr-1"
-          onClick={() => resetTimer('Completado')}
+          onClick={onCompleteTask}
         />
         <Button
           icon={<MdDelete />}

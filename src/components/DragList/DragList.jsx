@@ -17,6 +17,8 @@ const DragList = ({ onEditTask }) => {
     let [source_data] = tempData.splice(e.source.index, 1);
     tempData.splice(e.destination.index, 0, source_data);
     setRows(tempData);
+
+    dispatch({ type: 'global/updateTasks', payload: tempData });
   };
 
   const deleteElement = (id) => () => {
@@ -48,7 +50,7 @@ const DragList = ({ onEditTask }) => {
         <Droppable droppableId="droppable-1">
           {(provider) => (
             <tbody ref={provider.innerRef} {...provider.droppableProps}>
-              {rows.length >= 1 &&
+              {rows.length >= 1 ? (
                 rows.map((row, index) => (
                   <Draggable
                     key={row.description}
@@ -68,7 +70,7 @@ const DragList = ({ onEditTask }) => {
                           </div>
                         </td>
                         <td>
-                          {row?.durationChoice?.name || row.customDuration}
+                          {row?.durationChoice?.duration || row.customDuration}
                         </td>
                         <td>
                           <div className="action-column">
@@ -84,8 +86,12 @@ const DragList = ({ onEditTask }) => {
                       </tr>
                     )}
                   </Draggable>
-                ))}
-              {provider.placeholder}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={4}>No tasks</td>
+                </tr>
+              )}
             </tbody>
           )}
         </Droppable>

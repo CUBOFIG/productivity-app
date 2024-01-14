@@ -52,15 +52,10 @@ const Input = ({
     onChange(formattedValue); // Usar onChange en lugar de setValue
   };
 
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
-
   return (
     <div className="input-group">
       <label htmlFor={id}>{label}</label>
       <input
-        className="input"
         id={id}
         name={name}
         type="text"

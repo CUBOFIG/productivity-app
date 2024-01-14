@@ -25,11 +25,9 @@ const Select = ({
   }, [options]);
 
   useEffect(() => {
-    console.log('initialValue', initialValue, key, options);
     if (!initialValue || options.length === 0) return;
 
     const selectedOption = options.find((item) => item[key] === initialValue);
-    console.log('selectedOption', selectedOption);
     setValue(selectedOption ? selectedOption.id : '');
   }, [options, initialValue, key]);
 
