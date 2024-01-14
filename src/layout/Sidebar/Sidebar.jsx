@@ -22,13 +22,8 @@ const Sidebar = ({ onToggle, isOpen }) => {
   };
 
   useEffect(() => {
-    // Aplica el efecto al montar y al cambiar isOpen
     handleResize();
-
-    // Añade el listener de redimensionamiento
     window.addEventListener('resize', handleResize);
-
-    // Limpieza: remueve el listener de redimensionamiento
     return () => window.removeEventListener('resize', handleResize);
   }, [isOpen]);
 

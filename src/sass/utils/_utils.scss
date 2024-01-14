@@ -55,3 +55,42 @@
 .flex-center {
   align-items: center;
 }
+
+.input-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    color: rgb(28, 28, 28);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+}
+
+.input {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgb(28, 28, 28);
+  background-color: #fff;
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem rgb(100 108 255 / 25%);
+}
+
+.input:disabled {
+  background-color: #d5d5d5;
+}
+
+.mb-2 {
+  margin-bottom: 1rem;
+}

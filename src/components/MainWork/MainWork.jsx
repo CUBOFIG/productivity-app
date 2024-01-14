@@ -32,7 +32,6 @@ const MainWork = () => {
   const resetTimer = (logMessage) => {
     setTime(0);
     setTimerOn(false);
-    console.log(logMessage);
   };
 
   const formatTime = () => {
@@ -63,7 +62,11 @@ const MainWork = () => {
           className="mr-1"
           onClick={() => resetTimer('Completado')}
         />
-        <Button icon={<MdDelete />} onClick={() => resetTimer('Eliminado')} />
+        <Button
+          icon={<MdDelete />}
+          onClick={() => resetTimer('Eliminado')}
+          ariaLabel="delete"
+        />
       </div>
     </section>
   );

@@ -4,14 +4,19 @@
   border: none;
   padding: 0.5rem;
   border-radius: 0.3rem;
+  width: 100%;
+  justify-content: center;
 
-  .button__text {
-    margin-right: 0.5rem;
+  &__text {
     font-size: clamp(0.8rem, 3vw, 1rem);
   }
 
   svg {
     width: 1.2rem;
     height: 1.2rem;
+  }
+
+  @include responsive(tablet) {
+    width: auto;
   }
 }

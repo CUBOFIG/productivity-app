@@ -1,6 +1,6 @@
 .main-work {
   margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   header {
     display: flex;
@@ -18,6 +18,11 @@
 
   p {
     font-size: clamp(1.2rem, 3vw, 2rem);
+  }
+
+  & header > p {
+    margin-left: 2rem;
+    color: #646cff;
   }
 
   & > div {

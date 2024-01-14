@@ -4,7 +4,6 @@
   border-radius: 0.6rem;
   color: rgb(28, 28, 28);
   padding: 0.5rem;
-  margin-top: 2rem;
   font-size: clamp(12px, 3vw, 16px);
   height: 100%;
 
@@ -17,13 +16,34 @@
     height: 1.5rem;
   }
 
+  .action-column {
+    display: flex;
+    align-items: center;
+
+    & > div {
+      margin-right: auto;
+    }
+  }
+
   @include responsive(tablet) {
     margin-top: 0;
   }
 }
 
+thead {
+  background-color: #646cff;
+  color: white;
+  font-weight: 700;
+  border-radius: 0.6rem;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  height: 30px;
+  margin-bottom: 10px;
+}
+
 tbody {
-  height: 100%;
+  height: calc(100% - 40px);
   overflow-y: auto;
   display: block;
 }
