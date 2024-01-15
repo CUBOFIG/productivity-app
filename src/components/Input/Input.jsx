@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
-
 const isTimeFormatValid = (time) => /^(\d{1,2}(:\d{0,2})?)$/.test(time);
 
 const formatTime = (time) => {
-  let [hours, minutes = '00'] = time.split(':');
-  hours = hours.padStart(2, '0');
-  minutes = minutes.padEnd(2, '0');
+  let [hours, minutes = "00"] = time.split(":");
+  hours = hours.padStart(2, "0");
+  minutes = minutes.padEnd(2, "0");
   return `${hours}:${minutes}`;
 };
 
@@ -15,32 +13,32 @@ const Input = ({
   label,
   name,
   required = false,
-  type = 'text',
-  maxTime = '',
+  type = "text",
+  maxTime = "",
   placeholder,
   value,
   onChange = () => {},
 }) => {
   const handleOnChange = (e) => {
     const newValue = e.target.value;
-    if (type === 'time') {
-      let formattedValue = newValue.replace(/(\d{2})(\d)/, '$1:$2');
-      if (isTimeFormatValid(formattedValue) || formattedValue === '') {
-        onChange(formattedValue); // Usar onChange en lugar de setValue
+    if (type === "time") {
+      let formattedValue = newValue.replace(/(\d{2})(\d)/, "$1:$2");
+      if (isTimeFormatValid(formattedValue) || formattedValue === "") {
+        onChange(formattedValue);
       }
     } else {
-      onChange(newValue); // Usar onChange en lugar de setValue
+      onChange(newValue);
     }
   };
 
   const handleBlur = () => {
-    if (type !== 'time') return;
+    if (type !== "time") return;
 
     let formattedValue = formatTime(value);
-    const [maxHours, maxMinutes = '00'] = maxTime.split(':');
+    const [maxHours, maxMinutes = "00"] = maxTime.split(":");
     const maxTimeInMinutes =
       parseInt(maxHours, 10) * 60 + parseInt(maxMinutes, 10);
-    const [inputHours, inputMinutes = '00'] = formattedValue.split(':');
+    const [inputHours, inputMinutes = "00"] = formattedValue.split(":");
     const inputTimeInMinutes =
       parseInt(inputHours, 10) * 60 + parseInt(inputMinutes, 10);
 
@@ -48,8 +46,8 @@ const Input = ({
       formattedValue = maxTime;
     }
 
-    if (inputHours === '00' && inputMinutes === '00') return onChange('');
-    onChange(formattedValue); // Usar onChange en lugar de setValue
+    if (inputHours === "00" && inputMinutes === "00") return onChange("");
+    onChange(formattedValue);
   };
 
   return (
@@ -63,9 +61,9 @@ const Input = ({
         required={required}
         onChange={handleOnChange}
         onBlur={handleBlur}
-        placeholder={type === 'time' ? '00:00' : placeholder}
+        placeholder={type === "time" ? "00:00" : placeholder}
         value={value}
-        inputMode={type === 'time' ? 'numeric' : undefined}
+        inputMode={type === "time" ? "numeric" : undefined}
       />
     </div>
   );

@@ -1,24 +1,32 @@
-import { useState, useEffect } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa';
-import { FaCircleCheck } from 'react-icons/fa6';
-import { MdDelete } from 'react-icons/md';
-import Button from '../Button/Button';
-import { useDispatch, useSelector } from 'react-redux';
-import useTimer from '../../hooks/useTimer';
+import { useEffect } from "react";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { FaCircleCheck } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import useTimer from "../../hooks/useTimer";
+import { IconButton, Button } from "..";
+import { GrPowerReset } from "react-icons/gr";
 
 const MainWork = () => {
   const dispatch = useDispatch();
   const currentTask = useSelector((state) => state.global.currentTask);
-  const { time, setTime, timerOn, setTimerOn, isComplete } = useTimer();
+  const countChange = useSelector((state) => state.global.actions.changeTask);
+  const { time, setTime, setTimerOn, isComplete } = useTimer();
 
   const startTimer = () => setTimerOn(true);
   const pauseTimer = () => setTimerOn(false);
-  const resetTimer = (logMessage) => {};
 
   const onCompleteTask = () => {
     setTime(0);
     setTimerOn(false);
-    dispatch({ type: 'global/completeTask', payload: currentTask.id });
+    dispatch({ type: "global/completeTask", payload: currentTask.id });
+  };
+
+  const onDeleteTask = () => {
+    setTime(0);
+    setTimerOn(false);
+    dispatch({ type: "global/deleteTask", payload: currentTask.id });
+    dispatch({ type: "global/deselectTask" });
   };
 
   const formatTime = () => {
@@ -28,11 +36,10 @@ const MainWork = () => {
 
     return [hours, minutes, seconds]
       .map((val) => `0${val}`.slice(-2))
-      .join(':');
+      .join(":");
   };
 
   useEffect(() => {
-    console.log('currentTask', currentTask);
     if (!currentTask?.id) return;
 
     const data = {
@@ -47,19 +54,36 @@ const MainWork = () => {
 
   useEffect(() => {
     if (isComplete)
-      dispatch({ type: 'global/completeTask', payload: currentTask.id });
+      dispatch({ type: "global/completeTask", payload: currentTask.id });
   }, [isComplete]);
+
+  useEffect(() => {
+    console.log(">>>", countChange);
+  }, [countChange]);
 
   return (
     <section className="main-work">
       <header>
-        <h1>{currentTask?.description || ''}</h1>
+        <h1>{currentTask?.description || ""}</h1>
         <p>{formatTime()}</p>
       </header>
-      <div>
-        <div>
-          <FaPlay onClick={startTimer} />
-          <FaPause onClick={pauseTimer} />
+      <div className="main-work__section-control">
+        <div className="d-flex">
+          <IconButton
+            icon={FaPlay}
+            onClick={startTimer}
+            isDisabled={!currentTask?.id}
+          />
+          <IconButton
+            icon={FaPause}
+            onClick={pauseTimer}
+            isDisabled={!currentTask?.id}
+          />
+          <IconButton
+            icon={GrPowerReset}
+            onClick={pauseTimer}
+            isDisabled={!currentTask?.id}
+          />
         </div>
 
         <Button
@@ -67,11 +91,15 @@ const MainWork = () => {
           icon={<FaCircleCheck />}
           className="mr-1"
           onClick={onCompleteTask}
+          type="done"
+          isDisabled={!currentTask?.id}
         />
         <Button
           icon={<MdDelete />}
-          onClick={() => resetTimer('Eliminado')}
+          onClick={onDeleteTask}
           ariaLabel="delete"
+          type="delete"
+          isDisabled={!currentTask?.id}
         />
       </div>
     </section>

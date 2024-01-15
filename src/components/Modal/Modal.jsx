@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
-import classNames from 'classnames';
+import { useEffect } from "react";
+import classNames from "classnames";
+import PropTypes from "prop-types";
 
 const Modal = ({ onToggle, isOpen, children }) => {
-  const linkClasses = classNames('modal', {
-    'modal__is-open': isOpen,
+  const linkClasses = classNames("modal", {
+    "modal__is-open": isOpen,
   });
 
-  const overlayClass = classNames('modal__overlay', {
-    'sidebar__is-open-overlay': isOpen,
+  const overlayClass = classNames("modal__overlay", {
+    "sidebar__is-open-overlay": isOpen,
   });
 
   useEffect(() => {
-    document.body.style.overflowY = isOpen ? 'hidden' : 'scroll';
+    document.body.style.overflowY = isOpen ? "hidden" : "scroll";
   }, [isOpen]);
 
   return (
@@ -28,6 +29,12 @@ const Modal = ({ onToggle, isOpen, children }) => {
       </div>
     </>
   );
+};
+
+Modal.propTypes = {
+  onToggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  children: PropTypes.node,
 };
 
 export default Modal;

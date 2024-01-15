@@ -24,6 +24,32 @@
     & > div {
       margin-right: auto;
     }
+
+    .active {
+      color: #76b948;
+    }
+  }
+
+  .no-tasks {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    padding: 0;
+    top: 50%;
+    color: #242424;
+    font-size: 1rem;
+
+    & div {
+      display: flex;
+      align-items: center;
+    }
+
+    svg {
+      margin-right: 0.5rem;
+      color: #242424;
+    }
   }
 
   @include responsive(tablet) {
@@ -47,6 +73,7 @@ tbody {
   height: calc(100% - 40px);
   overflow-y: auto;
   display: block;
+  position: relative;
 }
 
 td {
@@ -58,9 +85,9 @@ thead,
 tbody tr {
   display: table;
   width: 100%;
-  table-layout: fixed; /* Esto es necesario para que las celdas no cambien de tamaño */
+  table-layout: fixed;
 }
 
 thead {
-  width: calc(100%); /* ajustar según el ancho de la barra de desplazamiento */
+  width: calc(100%);
 }

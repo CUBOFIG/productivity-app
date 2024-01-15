@@ -1,15 +1,18 @@
-import { useEffect, useState } from 'react';
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { PiDotsNine } from 'react-icons/pi';
-import { useDispatch, useSelector } from 'react-redux';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { FaPlay } from 'react-icons/fa';
-import { Tooltip } from '..';
+import { useEffect, useState } from "react";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { PiDotsNine } from "react-icons/pi";
+import { useDispatch, useSelector } from "react-redux";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { FaPlay } from "react-icons/fa";
+import { Tooltip } from "..";
+import PropTypes from "prop-types";
+import { FaInfoCircle } from "react-icons/fa";
 
 const DragList = ({ onEditTask }) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const stateListElements = useSelector((state) => state.global.tasks);
+  const currentTask = useSelector((state) => state.global.currentTask);
 
   const handleDragEnd = (e) => {
     if (!e.destination) return;
@@ -18,15 +21,21 @@ const DragList = ({ onEditTask }) => {
     tempData.splice(e.destination.index, 0, source_data);
     setRows(tempData);
 
-    dispatch({ type: 'global/updateTasks', payload: tempData });
+    if (e.source.index === 0 && e.destination.index === 0) return;
+
+    const conditionalInitial =
+      e.destination.index === 0 || e.source.index === 0;
+
+    dispatch({ type: "global/updateTasks", payload: tempData });
+    if (conditionalInitial) dispatch({ type: "global/changeTask" });
   };
 
   const deleteElement = (id) => () => {
-    dispatch({ type: 'global/deleteTask', payload: id });
+    dispatch({ type: "global/deleteTask", payload: id });
   };
 
   const selectTask = (id) => () => {
-    dispatch({ type: 'global/selectTask', payload: id });
+    dispatch({ type: "global/selectTask", payload: id });
   };
 
   const editTask = (task) => () => {
@@ -75,7 +84,12 @@ const DragList = ({ onEditTask }) => {
                         <td>
                           <div className="action-column">
                             <Tooltip text="Start">
-                              <FaPlay onClick={selectTask(row.id)} />
+                              <FaPlay
+                                onClick={selectTask(row.id)}
+                                className={
+                                  currentTask?.id === row.id ? "active" : ""
+                                }
+                              />
                             </Tooltip>
                             <div>
                               <MdEdit onClick={editTask(row)} />
@@ -89,7 +103,12 @@ const DragList = ({ onEditTask }) => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4}>No tasks</td>
+                  <td colSpan={4} className="no-tasks">
+                    <div>
+                      <FaInfoCircle />
+                      <p>No tasks</p>
+                    </div>
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -98,6 +117,10 @@ const DragList = ({ onEditTask }) => {
       </table>
     </DragDropContext>
   );
+};
+
+DragList.propTypes = {
+  onEditTask: PropTypes.func.isRequired,
 };
 
 export default DragList;

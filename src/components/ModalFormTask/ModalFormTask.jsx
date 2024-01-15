@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
+import { convertTimeToSeconds } from "../../Utils/mixin";
 import { Input, Select, Button, Modal } from "..";
 import { useDispatch } from "react-redux";
-import { convertTimeToSeconds } from "../../Utils/mixin";
+import { useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 
 const selectOptions = [
   { id: 1, name: "30 minutes", duration: 1800 },
@@ -44,7 +45,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
       }
 
       const currentData = {
-        id: isEdit ? data.id : Math.random(),
+        id: isEdit ? data?.id : Math.random(),
         description: formValues.description,
         durationChoice: {
           id: formValues.durationChoice,
@@ -65,10 +66,24 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   );
 
   const handleDurationChange = (value) => {
-    if (value == 4) setDisabledInput(false);
-    else {
+    if (value === "4") {
+      setDisabledInput(false);
+      setValues((prev) => ({
+        ...prev,
+        ...{
+          durationChoice: value,
+          customDuration: "",
+        },
+      }));
+    } else {
       setDisabledInput(true);
-      setValues((prev) => ({ ...prev, customDuration: "" }));
+      setValues((prev) => ({
+        ...prev,
+        ...{
+          durationChoice: value,
+          customDuration: "",
+        },
+      }));
     }
   };
 
@@ -116,7 +131,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
           />
           <Select
             id="duration-choice"
-            initialValue={values.durationChoice}
+            value={values.durationChoice}
             name="durationChoice"
             placeholder="Select duration"
             onChange={handleDurationChange}
@@ -141,13 +156,32 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
             type="time"
           />
           <Button
-            text={isEdit ? "Edit task form" : "Add task form"}
+            isDisabled={
+              !values.description ||
+              (disabledInput && !values.durationChoice) ||
+              (!disabledInput && !values.customDuration)
+            }
+            text={isEdit ? "Edit task" : "Add task"}
             formAction="submit"
           />
         </form>
       </section>
     </Modal>
   );
+};
+
+ModalFormTask.propTypes = {
+  data: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    durationChoice: PropTypes.shape({
+      id: PropTypes.number,
+      duration: PropTypes.number,
+    }),
+    customDuration: PropTypes.string,
+  }),
+  isOpen: PropTypes.bool.isRequired,
+  onToggle: PropTypes.func.isRequired,
 };
 
 export default ModalFormTask;

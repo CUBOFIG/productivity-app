@@ -6,6 +6,7 @@
   border-radius: 0.3rem;
   width: 100%;
   justify-content: center;
+  cursor: pointer;
 
   &__text {
     font-size: clamp(0.8rem, 3vw, 1rem);
@@ -18,5 +19,33 @@
 
   @include responsive(tablet) {
     width: auto;
+  }
+
+  &.done {
+    background-color: #76b948;
+
+    &:hover {
+      background-color: #68a540;
+    }
+
+    &:disabled {
+      background-color: rgb(172, 169, 169);
+    }
+  }
+
+  &.delete {
+    background-color: #ff6464;
+
+    &:hover {
+      background-color: #ff4f4f;
+    }
+
+    &:disabled {
+      background-color: rgb(172, 169, 169);
+    }
+  }
+
+  &:hover {
+    background-color: #5c5c5c;
   }
 }

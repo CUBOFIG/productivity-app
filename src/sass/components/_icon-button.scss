@@ -1,0 +1,9 @@
+.icon-button {
+  color: #646cff;
+  cursor: pointer;
+
+  & > svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

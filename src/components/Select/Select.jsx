@@ -1,35 +1,25 @@
-import { useEffect, useState } from 'react';
+import PropTypes from "prop-types";
 
 const Select = ({
-  options = [],
+  options,
   id,
   name,
   label,
   placeholder,
-  required = false,
-  onChange = () => {},
-  initialValue = null,
-  key = 'id',
+  required,
+  onChange,
+  value,
+  keyProp,
 }) => {
-  const [option, setOptions] = useState(options);
-  const [value, setValue] = useState('');
-
   const handleChange = (event) => {
-    const value = event.target.value;
-    setValue(value);
-    onChange(value);
+    const selectedValue = event.target.value;
+    onChange(selectedValue);
   };
 
-  useEffect(() => {
-    setOptions(options);
-  }, [options]);
-
-  useEffect(() => {
-    if (!initialValue || options.length === 0) return;
-
-    const selectedOption = options.find((item) => item[key] === initialValue);
-    setValue(selectedOption ? selectedOption.id : '');
-  }, [options, initialValue, key]);
+  const findOptionValue = (key) => {
+    const option = options.find((opt) => opt[keyProp] == key);
+    return option ? option[keyProp] : "";
+  };
 
   return (
     <div className="input-group">
@@ -38,20 +28,45 @@ const Select = ({
         id={id}
         name={name}
         onChange={handleChange}
-        value={value}
+        value={findOptionValue(value)}
         required={required}
       >
         <option value="" disabled>
           {placeholder}
         </option>
-        {option.map((item) => (
-          <option key={item.id} value={item.id}>
+        {options.map((item) => (
+          <option key={item[keyProp]} value={item[keyProp]}>
             {item.name}
           </option>
         ))}
       </select>
     </div>
   );
+};
+
+Select.propTypes = {
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      name: PropTypes.string.isRequired,
+    })
+  ),
+  id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  onChange: PropTypes.func,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  keyProp: PropTypes.string,
+};
+
+Select.defaultProps = {
+  options: [],
+  required: false,
+  onChange: () => {},
+  placeholder: "",
+  keyProp: "id",
 };
 
 export default Select;
