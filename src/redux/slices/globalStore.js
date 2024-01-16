@@ -56,6 +56,9 @@ export const globalStoreSlice = createSlice({
     updateTasks: (state, action) => {
       state.tasks = action.payload;
     },
+    updateCurrentTask: (state, action) => {
+      state.currentTask = action.payload;
+    },
     deselectTask: (state) => {
       state.currentTask = {};
     },

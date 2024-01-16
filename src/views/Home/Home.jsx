@@ -1,7 +1,6 @@
-import { IoMdAdd } from 'react-icons/io';
-import Modal from '../../components/Modal/Modal';
-import { useState } from 'react';
-import { DragList, MainWork, ModalFormTask, Button } from '../../components';
+import { IoMdAdd } from "react-icons/io";
+import { useState } from "react";
+import { DragList, MainWork, ModalFormTask, Button } from "../../components";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -23,6 +23,7 @@ IconButton.propTypes = {
 
 IconButton.defaultProps = {
   isDisabled: false,
+  onClick: () => {},
 };
 
 export default IconButton;

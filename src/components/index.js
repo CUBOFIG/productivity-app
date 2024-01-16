@@ -8,3 +8,4 @@ export { default as ModalFormTask } from "./ModalFormTask/ModalFormTask";
 export { default as Tooltip } from "./Tooltip/Tooltip";
 export { default as TableHistory } from "./TableHistory/TableHistory";
 export { default as IconButton } from "./IconButton/IconButton";
+export { default as FloatingTimer } from "./FloatingTimer/FloatingTimer";

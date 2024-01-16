@@ -1,4 +1,7 @@
-import { convertTimeToSeconds } from "../../Utils/mixin";
+import {
+  convertSecondsToTimeFormat,
+  convertTimeToSeconds,
+} from "../../Utils/mixin";
 import { Input, Select, Button, Modal } from "..";
 import { useDispatch } from "react-redux";
 import { useEffect, useState, useCallback } from "react";
@@ -25,6 +28,8 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   const [values, setValues] = useState(initialValues);
   const [isEdit, setIsEdit] = useState(false);
 
+  //const tasks = useSelector((state) => state.global.tasks);
+
   const resetForm = useCallback(() => {
     setValues(initialValues);
     setYourUniqueKey((prev) => prev + 1);
@@ -44,17 +49,24 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
         }
       }
 
-      const currentData = {
-        id: isEdit ? data?.id : Math.random(),
-        description: formValues.description,
-        durationChoice: {
-          id: formValues.durationChoice,
-          duration: selectOptions.find(
+      const isUseSelect = formValues.durationChoice !== "4";
+
+      const duration = isUseSelect
+        ? selectOptions.find(
             (e) => e.id === parseInt(formValues.durationChoice)
-          ).duration,
-        },
-        customDuration: convertTimeToSeconds(formValues.otherDuration),
+          ).duration
+        : convertTimeToSeconds(formValues.otherDuration);
+
+      const currentData = {
+        id: isEdit ? data?.id : crypto.randomUUID(),
+        description: formValues.description,
+        isUseSelect,
+        duration,
       };
+
+      // if (isEdit) {
+
+      // }
 
       const type = isEdit ? "global/editTask" : "global/addTask";
 
@@ -101,11 +113,22 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   useEffect(() => {
     if (data?.id) {
       setIsEdit(true);
-      setValues({
+
+      const durationChoice = data.isUseSelect
+        ? selectOptions.find((e) => e.duration === data.duration).id
+        : "4";
+
+      const customDuration = !data.isUseSelect
+        ? convertSecondsToTimeFormat(data.duration)
+        : null;
+
+      const values = {
         description: data.description,
-        durationChoice: parseInt(data.durationChoice.id),
-        customDuration: data.customDuration,
-      });
+        durationChoice,
+        customDuration,
+      };
+
+      setValues(values);
     } else {
       setIsEdit(false);
       resetForm();
@@ -174,11 +197,8 @@ ModalFormTask.propTypes = {
   data: PropTypes.shape({
     id: PropTypes.number,
     description: PropTypes.string,
-    durationChoice: PropTypes.shape({
-      id: PropTypes.number,
-      duration: PropTypes.number,
-    }),
-    customDuration: PropTypes.string,
+    duration: PropTypes.number,
+    isUseSelect: PropTypes.bool,
   }),
   isOpen: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,

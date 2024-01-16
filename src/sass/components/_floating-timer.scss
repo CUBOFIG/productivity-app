@@ -1,0 +1,15 @@
+.floating-timer {
+  display: flex;
+  position: absolute;
+  right: 32px;
+  top: 20px;
+
+  & > div:first-child {
+    color: red;
+    margin-right: 1rem;
+  }
+
+  & > div {
+    display: flex;
+  }
+}

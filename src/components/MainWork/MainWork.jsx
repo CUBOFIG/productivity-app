@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { FaPlay, FaPause } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
@@ -13,8 +13,15 @@ const MainWork = () => {
   const countChange = useSelector((state) => state.global.actions.changeTask);
   const { time, setTime, setTimerOn, isComplete } = useTimer();
 
+  const currentTaskRef = useRef(currentTask);
+  const timeRef = useRef(time);
+
   const startTimer = () => setTimerOn(true);
   const pauseTimer = () => setTimerOn(false);
+  const resetTimer = () => {
+    setTime(currentTask?.duration);
+    setTimerOn(false);
+  };
 
   const onCompleteTask = () => {
     setTime(0);
@@ -39,17 +46,27 @@ const MainWork = () => {
       .join(":");
   };
 
+  const saveTask = () => {
+    const data = {
+      id: currentTask.id,
+      description: currentTask.description,
+      duration: currentTask?.duration,
+    };
+
+    dispatch({ type: "global/updateTask", payload: data });
+  };
+
   useEffect(() => {
     if (!currentTask?.id) return;
 
     const data = {
       id: currentTask.id,
       description: currentTask.description,
-      duration:
-        currentTask?.durationChoice?.duration || currentTask.customDuration,
+      duration: currentTask?.duration,
     };
 
     setTime(data.duration);
+    setTimerOn(true);
   }, [currentTask]);
 
   useEffect(() => {
@@ -58,8 +75,34 @@ const MainWork = () => {
   }, [isComplete]);
 
   useEffect(() => {
-    console.log(">>>", countChange);
+    saveTask();
   }, [countChange]);
+
+  useEffect(() => {
+    currentTaskRef.current = currentTask;
+    timeRef.current = time;
+  }, [currentTask, time]);
+
+  useEffect(() => {
+    return () => {
+      if (
+        currentTaskRef.current &&
+        currentTaskRef.current.id &&
+        timeRef.current
+      ) {
+        console.log("entra");
+
+        dispatch({
+          type: "global/updateCurrentTask",
+          payload: {
+            id: currentTaskRef.current.id,
+            description: currentTaskRef.current.description,
+            duration: timeRef.current,
+          },
+        });
+      }
+    };
+  }, [dispatch]);
 
   return (
     <section className="main-work">
@@ -81,13 +124,13 @@ const MainWork = () => {
           />
           <IconButton
             icon={GrPowerReset}
-            onClick={pauseTimer}
+            onClick={resetTimer}
             isDisabled={!currentTask?.id}
           />
         </div>
 
         <Button
-          text="COMPLETE"
+          text="Complete"
           icon={<FaCircleCheck />}
           className="mr-1"
           onClick={onCompleteTask}
