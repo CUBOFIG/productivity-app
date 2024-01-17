@@ -1,13 +1,12 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 const TableHistory = () => {
   const endTasks = useSelector((state) => state.global.endTasks);
 
   const formatDate = (date) => {
     const originalDate = new Date(date);
-    const day = originalDate.getDate().toString().padStart(2, '0');
-    const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = originalDate.getDate().toString().padStart(2, "0");
+    const month = (originalDate.getMonth() + 1).toString().padStart(2, "0");
     const year = originalDate.getFullYear().toString();
 
     return `${month}/${day}/${year}`;

@@ -1,6 +1,30 @@
 .sidebar {
   overflow: hidden;
 
+  &__format {
+    background: rgb(226, 233, 235);
+    border-radius: 0 0.5rem 0.5rem 0;
+    margin-left: -150%;
+    min-height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: all 0.5s;
+    width: 50%;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    overflow: hidden;
+
+    @include responsive(tablet) {
+      position: static;
+      margin: 0;
+    }
+  }
+
   .sidebar-container {
     display: flex;
     flex-direction: column;
@@ -34,25 +58,6 @@
       & .header-item p {
         display: block;
       }
-    }
-  }
-
-  &__format {
-    background: rgb(226, 233, 235);
-    border-radius: 0 0.5rem 0.5rem 0;
-    color: white;
-    margin-left: -150%;
-    min-height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    transition: all 0.5s;
-    width: 50%;
-    z-index: 1000;
-
-    @include responsive(tablet) {
-      position: static;
-      margin: 0;
     }
   }
 
@@ -106,7 +111,7 @@
     }
   }
 
-  .sidebar_toggle {
+  &_toggle {
     position: absolute;
     top: 20px;
     left: 32px;
@@ -120,6 +125,20 @@
 
     @include responsive(tablet) {
       display: none;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    background-color: #646cff;
+
+    & svg {
+      color: rgb(226, 233, 235);
+      width: 1.5rem;
+      height: 1.5rem;
     }
   }
 

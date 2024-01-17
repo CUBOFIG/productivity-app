@@ -5,7 +5,7 @@ const Button = ({
   ariaLabel,
   className,
   formAction,
-  icon,
+  icon: Icon,
   onClick,
   text,
   type,
@@ -21,14 +21,14 @@ const Button = ({
       aria-label={ariaLabel || text}
       disabled={isDisabled}
     >
-      {text && <p className={`button__text ${icon ? "mr-1" : ""}`}>{text}</p>}
-      {icon}
+      {text && <p className={`button__text ${Icon ? "mr-1" : ""}`}>{text}</p>}
+      {Icon && <Icon />}
     </button>
   );
 };
 
 Button.propTypes = {
-  icon: PropTypes.node,
+  icon: PropTypes.elementType,
   text: PropTypes.string,
   onClick: PropTypes.func,
   className: PropTypes.string,
@@ -41,6 +41,7 @@ Button.propTypes = {
 Button.defaultProps = {
   onClick: () => {},
   isDisabled: false,
+  icon: null,
 };
 
 export default Button;

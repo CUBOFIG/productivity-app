@@ -1,42 +1,41 @@
-import React, { useEffect } from 'react';
-import HeaderItem from '../../shared/HeaderItem/HeaderItem';
-import classNames from 'classnames';
-import { GoGraph, GoHomeFill, GoChecklist } from 'react-icons/go';
-import { GiHamburgerMenu } from 'react-icons/gi';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { FaGithub } from "react-icons/fa";
+import { HeaderItem } from "../../components";
+import classNames from "classnames";
+import { GoGraph, GoHomeFill, GoChecklist } from "react-icons/go";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 const Sidebar = ({ onToggle, isOpen }) => {
-  const linkClasses = classNames('sidebar__format', {
-    'sidebar__is-open': isOpen,
-  });
-
-  const overlayClass = classNames('sidebar__overlay', {
-    'sidebar__is-open-overlay': isOpen,
-  });
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleResize = () => {
+    setWindowWidth(window.innerWidth);
+
     if (window.innerWidth <= 500) {
-      document.body.style.overflowY = isOpen ? 'hidden' : 'scroll';
-    } else {
-      document.body.style.overflowY = 'scroll';
-    }
+      document.body.style.overflowY = isOpen ? "hidden" : "scroll";
+    } else document.body.style.overflowY = "scroll";
   };
+
+  const linkClasses = classNames("sidebar__format", {
+    "sidebar__is-open": isOpen,
+  });
+
+  const overlayClass = classNames("sidebar__overlay", {
+    "sidebar__is-open-overlay": isOpen && windowWidth <= 500,
+  });
 
   useEffect(() => {
     handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [isOpen]);
 
   return (
     <>
       <div className="sidebar">
         <div>
-          <div
-            className="sidebar_toggle"
-            onClick={() => {
-              onToggle();
-            }}
-          >
+          <div className="sidebar_toggle" onClick={() => onToggle()}>
             <GiHamburgerMenu />
           </div>
         </div>
@@ -45,29 +44,37 @@ const Sidebar = ({ onToggle, isOpen }) => {
             <ul>
               <li>
                 <HeaderItem
-                  icon={<GoHomeFill />}
+                  icon={GoHomeFill}
                   goTo="/"
                   text="Home"
-                  isOpen={onToggle}
+                  onClick={onToggle}
                 />
               </li>
               <li>
                 <HeaderItem
-                  icon={<GoGraph />}
+                  icon={GoGraph}
                   goTo="dashboard"
                   text="Dashboard"
-                  isOpen={onToggle}
+                  onClick={onToggle}
                 />
               </li>
               <li>
                 <HeaderItem
-                  icon={<GoChecklist />}
+                  icon={GoChecklist}
                   goTo="history"
                   text="History"
-                  isOpen={onToggle}
+                  onClick={onToggle}
                 />
               </li>
             </ul>
+          </div>
+
+          <div className="sidebar__footer">
+            <HeaderItem
+              goTo="https://github.com/CUBOFIG/productivity-app"
+              onClick={onToggle}
+              icon={FaGithub}
+            />
           </div>
         </div>
         {isOpen ? (
@@ -79,6 +86,11 @@ const Sidebar = ({ onToggle, isOpen }) => {
       </div>
     </>
   );
+};
+
+Sidebar.propTypes = {
+  onToggle: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
 };
 
 export default Sidebar;

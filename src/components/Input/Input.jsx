@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const isTimeFormatValid = (time) => /^(\d{1,2}(:\d{0,2})?)$/.test(time);
 
 const formatTime = (time) => {
@@ -42,9 +44,7 @@ const Input = ({
     const inputTimeInMinutes =
       parseInt(inputHours, 10) * 60 + parseInt(inputMinutes, 10);
 
-    if (inputTimeInMinutes > maxTimeInMinutes) {
-      formattedValue = maxTime;
-    }
+    if (inputTimeInMinutes > maxTimeInMinutes) formattedValue = maxTime;
 
     if (inputHours === "00" && inputMinutes === "00") return onChange("");
     onChange(formattedValue);
@@ -67,6 +67,19 @@ const Input = ({
       />
     </div>
   );
+};
+
+Input.propTypes = {
+  disabled: PropTypes.bool,
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  required: PropTypes.bool,
+  type: PropTypes.string,
+  maxTime: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func,
 };
 
 export default Input;

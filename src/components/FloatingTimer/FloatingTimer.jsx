@@ -1,5 +1,3 @@
-import { FaPause, FaPlay } from "react-icons/fa";
-import IconButton from "../IconButton/IconButton";
 import { useDispatch, useSelector } from "react-redux";
 import useTimer from "../../hooks/useTimer";
 import { useCallback, useEffect, useMemo, useRef } from "react";
@@ -17,7 +15,7 @@ const FloatingTimer = () => {
     if (!currentTask?.id) return;
     setTime(currentTask.duration);
     setTimerOn(true);
-  }, [currentTask, setTime, setTimerOn]); //changeTask
+  }, [currentTask, setTime, setTimerOn]);
 
   useEffect(() => {
     currentTaskRef.current = currentTask;
@@ -35,6 +33,7 @@ const FloatingTimer = () => {
       dispatch({
         type: "global/updateCurrentTask",
         payload: {
+          ...currentTaskRef.current,
           id: currentTaskRef.current.id,
           description: currentTaskRef.current.description,
           duration: timeRef.current,
@@ -51,10 +50,6 @@ const FloatingTimer = () => {
     <div className="floating-timer">
       <div>
         <p>{formattedTime}</p>
-      </div>
-      <div>
-        <IconButton icon={FaPlay} />
-        <IconButton icon={FaPause} />
       </div>
     </div>
   );

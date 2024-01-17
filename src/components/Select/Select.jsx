@@ -10,6 +10,7 @@ const Select = ({
   onChange,
   value,
   keyProp,
+  disabledDefault,
 }) => {
   const handleChange = (event) => {
     const selectedValue = event.target.value;
@@ -23,7 +24,7 @@ const Select = ({
 
   return (
     <div className="input-group">
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       <select
         id={id}
         name={name}
@@ -31,7 +32,7 @@ const Select = ({
         value={findOptionValue(value)}
         required={required}
       >
-        <option value="" disabled>
+        <option value="" disabled={disabledDefault}>
           {placeholder}
         </option>
         {options.map((item) => (
@@ -59,6 +60,7 @@ Select.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   keyProp: PropTypes.string,
+  disabledDefault: PropTypes.bool,
 };
 
 Select.defaultProps = {
@@ -67,6 +69,8 @@ Select.defaultProps = {
   onChange: () => {},
   placeholder: "",
   keyProp: "id",
+  disabledDefault: true,
+  label: "",
 };
 
 export default Select;

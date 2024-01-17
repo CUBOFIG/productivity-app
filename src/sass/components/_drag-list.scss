@@ -1,93 +1,185 @@
 .drag-list {
-  background-color: rgb(226, 233, 235);
-  width: 100%;
-  border-radius: 0.6rem;
-  color: rgb(28, 28, 28);
-  padding: 0.5rem;
-  font-size: clamp(12px, 3vw, 16px);
   height: 100%;
 
-  td {
-    padding: 1rem;
+  table {
+    overflow: hidden;
+    border-radius: 0.6rem;
+    height: 100%;
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: fixed;
+    color: black;
+    position: relative;
   }
 
-  svg {
-    width: 1.2rem;
-    height: 1.2rem;
-    color: #242424;
+  table tbody tr:first-child {
+    .actions {
+      & svg {
+        margin: 0;
+      }
+
+      & > div {
+        display: none;
+      }
+    }
   }
 
-  .action-column {
+  table tbody tr td:first-child {
+    & > svg {
+      display: none;
+    }
+
+    & div {
+      justify-content: flex-end;
+    }
+  }
+
+  tr {
+    border-radius: 0.3rem;
+    box-sizing: border-box;
+    display: block;
+    margin-bottom: 0.625em;
+  }
+
+  table tbody {
+    height: 100%;
+  }
+
+  table tbody tr {
+    background-color: #f8f8f8;
+  }
+
+  table thead {
+    background-color: #3a3a3b !important;
+    display: none;
+    margin-top: 1rem;
+  }
+
+  table th {
+    font-size: 0.85em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  table td {
+    display: block;
+    font-size: 0.8em;
+    text-align: right;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+
+  .actions {
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
 
-    & > div {
-      margin-right: auto;
+    & svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      color: #242424;
     }
 
-    .active {
-      color: #76b948;
+    & > svg {
+      margin-right: 1.5rem;
     }
+  }
+
+  .active {
+    color: #646cff !important;
+  }
+
+  .bg-dark {
+    background-color: #3a3a3b;
   }
 
   .no-tasks {
-    display: flex;
+    background-color: transparent;
     justify-content: center;
-    position: absolute;
-    width: 100%;
     left: 0;
-    padding: 0;
+    position: absolute;
     top: 50%;
-    color: #242424;
-    font-size: 1rem;
+    width: 100%;
 
-    & div {
-      display: flex;
-      align-items: center;
+    & td {
+      width: 100%;
     }
 
-    svg {
+    & td > div {
+      width: 100%;
+      display: flex;
+      justify-content: center !important;
+      align-items: center;
+      color: #f8f8f8;
+    }
+
+    & svg {
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
       margin-right: 0.5rem;
-      color: #242424;
     }
   }
 
   @include responsive(tablet) {
-    margin-top: 0;
+    table {
+      background-color: #3a3a3b;
+    }
+
+    table tbody {
+      padding: 0 1rem;
+    }
+
+    & table thead {
+      display: table !important;
+    }
+
+    & table thead tr {
+      display: table-header-group;
+    }
+
+    & table td {
+      display: table-cell;
+      text-align: center;
+    }
+
+    table td::before {
+      content: none;
+    }
+
+    table tr {
+      display: table;
+    }
+
+    table tbody tr {
+      height: 65px;
+    }
+
+    .actions {
+      justify-content: center;
+    }
+
+    table tbody tr td:first-child {
+      & svg {
+        display: block;
+        width: 1.2rem;
+        height: 1.2rem;
+        margin-right: 1rem;
+      }
+
+      & div {
+        justify-content: flex-start;
+      }
+    }
   }
-}
-
-thead {
-  background-color: #646cff;
-  color: white;
-  font-weight: 700;
-  border-radius: 0.6rem;
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-  height: 30px;
-  margin-bottom: 10px;
-}
-
-tbody {
-  height: calc(100% - 40px);
-  overflow-y: auto;
-  display: block;
-  position: relative;
-}
-
-td {
-  padding: 1rem;
-  white-space: nowrap;
-}
-
-thead,
-tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-thead {
-  width: calc(100%);
 }

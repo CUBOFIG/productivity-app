@@ -20,6 +20,18 @@ const initialValues = {
   customDuration: "",
 };
 
+const generateIdByDuration = (seconds) => {
+  const minutes = seconds / 60;
+
+  if (minutes <= 30) {
+    return "id-short";
+  } else if (minutes <= 60) {
+    return "id-medium";
+  } else {
+    return "id-long";
+  }
+};
+
 const ModalFormTask = ({ data, isOpen, onToggle }) => {
   const dispatch = useDispatch();
 
@@ -27,8 +39,6 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   const [yourUniqueKey, setYourUniqueKey] = useState(0);
   const [values, setValues] = useState(initialValues);
   const [isEdit, setIsEdit] = useState(false);
-
-  //const tasks = useSelector((state) => state.global.tasks);
 
   const resetForm = useCallback(() => {
     setValues(initialValues);
@@ -62,17 +72,15 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
         description: formValues.description,
         isUseSelect,
         duration,
+        initialDuration: duration,
+        type: generateIdByDuration(duration),
       };
-
-      // if (isEdit) {
-
-      // }
 
       const type = isEdit ? "global/editTask" : "global/addTask";
 
       dispatch({ type, payload: currentData });
       setYourUniqueKey((prev) => prev + 1);
-      onToggle();
+      closeModal();
     },
     [dispatch, isEdit, data, resetForm]
   );
@@ -115,12 +123,15 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
       setIsEdit(true);
 
       const durationChoice = data.isUseSelect
-        ? selectOptions.find((e) => e.duration === data.duration).id
-        : "4";
+        ? selectOptions.find((e) => e.duration === data.duration)?.id || 4
+        : 4;
 
-      const customDuration = !data.isUseSelect
-        ? convertSecondsToTimeFormat(data.duration)
-        : null;
+      if (!data.isUseSelect || durationChoice === 4) setDisabledInput(false);
+
+      const customDuration =
+        !data.isUseSelect || durationChoice === 4
+          ? convertSecondsToTimeFormat(data.duration)
+          : null;
 
       const values = {
         description: data.description,

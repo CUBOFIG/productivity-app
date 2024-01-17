@@ -1,0 +1,9 @@
+.history {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  & button {
+    margin-bottom: 1rem;
+  }
+}
