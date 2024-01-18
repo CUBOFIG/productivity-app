@@ -1,35 +1,21 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { FaGithub } from "react-icons/fa";
-import { HeaderItem } from "../../components";
-import classNames from "classnames";
-import { GoGraph, GoHomeFill, GoChecklist } from "react-icons/go";
-import { GiHamburgerMenu } from "react-icons/gi";
+import PropTypes from 'prop-types';
+import { FaGithub } from 'react-icons/fa';
+import { HeaderItem } from '../../components';
+import classNames from 'classnames';
+import { GoGraph, GoHomeFill, GoChecklist } from 'react-icons/go';
+import { GiHamburgerMenu } from 'react-icons/gi';
+import useWindowResize from '../../hooks/useWindowResize';
 
 const Sidebar = ({ onToggle, isOpen }) => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const windowWidth = useWindowResize(isOpen);
 
-  const handleResize = () => {
-    setWindowWidth(window.innerWidth);
-
-    if (window.innerWidth <= 500) {
-      document.body.style.overflowY = isOpen ? "hidden" : "scroll";
-    } else document.body.style.overflowY = "scroll";
-  };
-
-  const linkClasses = classNames("sidebar__format", {
-    "sidebar__is-open": isOpen,
+  const linkClasses = classNames('sidebar__format', {
+    'sidebar__is-open': isOpen,
   });
 
-  const overlayClass = classNames("sidebar__overlay", {
-    "sidebar__is-open-overlay": isOpen && windowWidth <= 500,
+  const overlayClass = classNames('sidebar__overlay', {
+    'sidebar__is-open-overlay': isOpen && windowWidth <= 700,
   });
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isOpen]);
 
   return (
     <>

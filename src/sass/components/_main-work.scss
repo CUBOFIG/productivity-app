@@ -1,6 +1,6 @@
 .main-work {
   margin-top: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 
   header {
     display: flex;
@@ -22,7 +22,7 @@
 
   & header > p {
     margin-left: 2rem;
-    color: #646cff;
+    color: $main-color;
   }
 
   & > div {
@@ -30,11 +30,9 @@
     align-items: center;
   }
 
-  & > div > div {
-    margin-right: auto;
-  }
-
   &__section-control {
+    flex-direction: column;
+
     & div div:first-child {
       margin-right: 1rem;
     }
@@ -49,7 +47,48 @@
     }
   }
 
+  .main-actions {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.25rem;
+    justify-content: flex-end;
+
+    svg {
+      color: $main-disabled;
+    }
+
+    svg:hover {
+      color: $main-color;
+    }
+
+    .active svg {
+      color: $main-color !important;
+    }
+  }
+
+  .main-actions-data {
+    width: 100%;
+    display: flex;
+
+    & > button:first-child {
+      width: 100%;
+    }
+  }
+
   @include responsive(tablet) {
     margin-top: 0;
+    margin-bottom: 1rem;
+
+    &__section-control {
+      flex-direction: row;
+    }
+
+    .main-actions {
+      margin-right: auto;
+      width: auto;
+    }
+    .main-actions-data {
+      width: auto;
+    }
   }
 }

@@ -2,6 +2,9 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  max-width: $max-width;
+  margin: 0 auto;
+  width: 100%;
 
   & > .container-buttons {
     display: flex;
@@ -10,7 +13,7 @@
     button {
       margin-bottom: 1rem;
       justify-content: center;
-      background-color: #646cff;
+      background-color: $main-color;
       margin-bottom: 0.5rem;
     }
 

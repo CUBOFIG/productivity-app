@@ -1,34 +1,34 @@
 import {
   convertSecondsToTimeFormat,
   convertTimeToSeconds,
-} from "../../Utils/mixin";
-import { Input, Select, Button, Modal } from "..";
-import { useDispatch } from "react-redux";
-import { useEffect, useState, useCallback } from "react";
-import PropTypes from "prop-types";
+} from '../../utils/mixin';
+import { Input, Select, Button, Modal } from '..';
+import { useDispatch } from 'react-redux';
+import { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
 const selectOptions = [
-  { id: 1, name: "30 minutes", duration: 1800 },
-  { id: 2, name: "45 minutes", duration: 2700 },
-  { id: 3, name: "1 hour", duration: 3600 },
-  { id: 4, name: "Other duration" },
+  { id: 1, name: '30 minutes', duration: 1800 },
+  { id: 2, name: '45 minutes', duration: 2700 },
+  { id: 3, name: '1 hour', duration: 3600 },
+  { id: 4, name: 'Other duration' },
 ];
 
 const initialValues = {
-  description: "",
-  durationChoice: "",
-  customDuration: "",
+  description: '',
+  durationChoice: '',
+  customDuration: '',
 };
 
 const generateIdByDuration = (seconds) => {
   const minutes = seconds / 60;
 
   if (minutes <= 30) {
-    return "id-short";
-  } else if (minutes <= 60) {
-    return "id-medium";
+    return 'id-short';
+  } else if (minutes <= 60 && minutes > 30) {
+    return 'id-medium';
   } else {
-    return "id-long";
+    return 'id-long';
   }
 };
 
@@ -54,16 +54,16 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
 
       for (let i = 0; i < elements.length; i++) {
         const element = elements[i];
-        if (element.name && element.type !== "submit") {
+        if (element.name && element.type !== 'submit') {
           formValues[element.name] = element.value;
         }
       }
 
-      const isUseSelect = formValues.durationChoice !== "4";
+      const isUseSelect = formValues.durationChoice !== '4';
 
       const duration = isUseSelect
         ? selectOptions.find(
-            (e) => e.id === parseInt(formValues.durationChoice)
+            (e) => e.id === parseInt(formValues.durationChoice),
           ).duration
         : convertTimeToSeconds(formValues.otherDuration);
 
@@ -74,25 +74,26 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
         duration,
         initialDuration: duration,
         type: generateIdByDuration(duration),
+        createdAt: isEdit ? data?.createdAt : new Date().toISOString(),
       };
 
-      const type = isEdit ? "global/editTask" : "global/addTask";
+      const type = isEdit ? 'global/editTask' : 'global/addTask';
 
       dispatch({ type, payload: currentData });
       setYourUniqueKey((prev) => prev + 1);
       closeModal();
     },
-    [dispatch, isEdit, data, resetForm]
+    [dispatch, isEdit, data, resetForm],
   );
 
   const handleDurationChange = (value) => {
-    if (value === "4") {
+    if (value === '4') {
       setDisabledInput(false);
       setValues((prev) => ({
         ...prev,
         ...{
           durationChoice: value,
-          customDuration: "",
+          customDuration: '',
         },
       }));
     } else {
@@ -101,7 +102,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
         ...prev,
         ...{
           durationChoice: value,
-          customDuration: "",
+          customDuration: '',
         },
       }));
     }
@@ -111,9 +112,9 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
     setYourUniqueKey((prev) => prev + 1);
     onToggle();
     setValues({
-      description: "",
-      durationChoice: "",
-      customDuration: "",
+      description: '',
+      durationChoice: '',
+      customDuration: '',
     });
     setDisabledInput(true);
   };
@@ -146,13 +147,21 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    setTimeout(() => {
+      const element = document.getElementById('description');
+      if (element) element.focus();
+    }, 200);
+  }, [isOpen]);
+
   return (
     <Modal isOpen={isOpen} onToggle={closeModal}>
       <section className="form-task" key={yourUniqueKey}>
-        <h2 className="mb-2">{isEdit ? "Edit task" : "Add task"}</h2>
+        <h2 className="mb-2">{isEdit ? 'Edit task' : 'Add task'}</h2>
         <form
           onSubmit={onHandleSubmite}
-          aria-label={isEdit ? "Edit task form" : "Add task form"}
+          aria-label={isEdit ? 'Edit task form' : 'Add task form'}
         >
           <Input
             id="description"
@@ -195,7 +204,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
               (disabledInput && !values.durationChoice) ||
               (!disabledInput && !values.customDuration)
             }
-            text={isEdit ? "Edit task" : "Add task"}
+            text={isEdit ? 'Edit task' : 'Add task'}
             formAction="submit"
           />
         </form>

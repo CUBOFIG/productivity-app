@@ -1,11 +1,16 @@
 .form-task {
   h2 {
     font-weight: 700;
-    color: rgb(28, 28, 28);
+    color: $text-color;
   }
 
   button {
-    background-color: #646cff;
+    background-color: $main-color;
     margin-left: auto;
+  }
+
+  button:disabled {
+    background-color: $main-color;
+    opacity: 0.5;
   }
 }

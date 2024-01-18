@@ -1,14 +1,14 @@
-import { useDispatch } from "react-redux";
-import { generateFakeTasks } from "../../Utils/mixin";
-import { Button, FloatingTimer, TableHistory } from "../../components";
-import { TbLayoutGridAdd } from "react-icons/tb";
+import { useDispatch } from 'react-redux';
+import { generateFakeTasks } from '../../utils/mixin';
+import { Button, FloatingTimer, TableHistory } from '../../components';
+import { TbLayoutGridAdd } from 'react-icons/tb';
 
 const History = () => {
   const dispatch = useDispatch();
 
   const generateFakeHistory = () => {
     const fakeTasks = generateFakeTasks();
-    dispatch({ type: "global/generateHistory", payload: fakeTasks });
+    dispatch({ type: 'global/generateHistory', payload: fakeTasks });
   };
 
   return (

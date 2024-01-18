@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
-import { FaCircleCheck } from "react-icons/fa6";
-import { MdDelete } from "react-icons/md";
-import { useDispatch, useSelector } from "react-redux";
-import useTimer from "../../hooks/useTimer";
-import { IconButton, Button, Modal } from "..";
-import { GrPowerReset } from "react-icons/gr";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { FaPlay, FaPause } from 'react-icons/fa';
+import { FaCircleCheck } from 'react-icons/fa6';
+import { MdDelete, MdEdit } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import useTimer from '../../hooks/useTimer';
+import { IconButton, Button, Modal } from '..';
+import { GrPowerReset } from 'react-icons/gr';
 
-const MainWork = () => {
+const MainWork = ({ onEditTask }) => {
   const dispatch = useDispatch();
 
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const currentTask = useSelector((state) => state.global.currentTask);
   const switchChange = useSelector((state) => state.global.actions.changeTask);
-  const { time, setTime, setTimerOn, isComplete } = useTimer();
+  const { time, setTime, timerOn, setTimerOn, isComplete } = useTimer();
 
   const currentTaskRef = useRef(currentTask);
   const timeRef = useRef(null);
+  const isPlayRef = useRef(false);
 
   const startTimer = () => setTimerOn(true);
   const pauseTimer = () => setTimerOn(false);
@@ -26,13 +27,24 @@ const MainWork = () => {
   };
 
   const onCompleteTask = () => {
+    dispatch({
+      type: 'global/completeCurrentTask',
+      payload: {
+        ...currentTask,
+        remainingTime: time,
+      },
+    });
+
     setTime(0);
     setTimerOn(false);
-    dispatch({ type: "global/completeTask", payload: currentTask.id });
   };
 
   const onDeleteTask = () => {
     setIsOpenDelete(true);
+  };
+
+  const onEdit = () => {
+    onEditTask(currentTask);
   };
 
   const formatTime = () => {
@@ -42,7 +54,7 @@ const MainWork = () => {
 
     return [hours, minutes, seconds]
       .map((val) => `0${val}`.slice(-2))
-      .join(":");
+      .join(':');
   };
 
   const saveTask = () => {
@@ -51,16 +63,16 @@ const MainWork = () => {
     const data = {
       ...currentTask,
       duration: timeRef.current,
+      isInProgress: false,
     };
 
     dispatch({
-      type: "global/updateTasksWithId",
+      type: 'global/updateTasksWithId',
       payload: {
         data,
-        index: switchChange?.index,
+        tasks: switchChange?.data,
       },
     });
-    dispatch({ type: "global/deselectTask" });
     setTime(0);
     setTimerOn(false);
   };
@@ -75,7 +87,7 @@ const MainWork = () => {
     };
 
     setTime(data.duration);
-    setTimerOn(true);
+    if (currentTask.isInProgress) setTimerOn(true);
   }, [currentTask]);
 
   useEffect(() => {
@@ -85,53 +97,53 @@ const MainWork = () => {
   useEffect(() => {
     currentTaskRef.current = currentTask;
     timeRef.current = time;
-  }, [currentTask, time]);
+    isPlayRef.current = timerOn;
+  }, [currentTask, time, timerOn]);
+
+  const cleanup = useCallback(() => {
+    if (currentTaskRef.current.id && timeRef.current && isPlayRef.current) {
+      dispatch({
+        type: 'global/updateCurrentTask',
+        payload: {
+          ...currentTaskRef.current,
+          duration: timeRef.current,
+          isInProgress: isPlayRef.current,
+        },
+      });
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     return () => {
-      if (
-        currentTaskRef.current &&
-        currentTaskRef.current.id &&
-        timeRef.current
-      ) {
-        dispatch({
-          type: "global/updateCurrentTask",
-          payload: {
-            ...currentTaskRef.current,
-            id: currentTaskRef.current.id,
-            description: currentTaskRef.current.description,
-            duration: timeRef.current,
-          },
-        });
-      }
+      cleanup();
     };
-  }, [dispatch]);
+  }, [cleanup]);
 
+  //Este useEffect es para cuando se cambia de elemento en el listado, si cambia el currentTask por otro, se guarda el tiempo trabajado.
   useEffect(() => {
     if (switchChange?.switch) saveTask();
   }, [switchChange]);
 
+  //Esta seccion de codigo es para guardar la info del currentTask trabajado en el localstorage, para que no se pierda si se recarga la pagina.
   const local = useRef(false);
 
   const saveData = () => {
     const dataToSave = {
       ...currentTaskRef.current,
       duration: timeRef.current,
+      isInProgress: isPlayRef.current,
     };
 
     local.current = true;
-    localStorage.setItem("master", JSON.stringify(dataToSave));
+    localStorage.setItem('master', JSON.stringify(dataToSave));
   };
 
   useEffect(() => {
     if (local.current) return;
-
     const handleBeforeUnload = () => saveData();
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
@@ -139,20 +151,22 @@ const MainWork = () => {
     <>
       <section className="main-work">
         <header>
-          <h1>{currentTask?.description || ""}</h1>
+          <h1>{currentTask?.description || ''}</h1>
           <p>{formatTime()}</p>
         </header>
         <div className="main-work__section-control">
-          <div className="d-flex">
+          <div className="main-actions">
             <IconButton
               icon={FaPlay}
               onClick={startTimer}
               isDisabled={!currentTask?.id}
+              className={timerOn ? 'active' : ''}
             />
             <IconButton
               icon={FaPause}
               onClick={pauseTimer}
               isDisabled={!currentTask?.id}
+              className={!timerOn ? 'active' : ''}
             />
             <IconButton
               icon={GrPowerReset}
@@ -161,22 +175,32 @@ const MainWork = () => {
             />
           </div>
 
-          <Button
-            text="Complete"
-            icon={FaCircleCheck}
-            className="mr-1"
-            onClick={onCompleteTask}
-            type="done"
-            isDisabled={!currentTask?.id}
-          />
+          <div className="main-actions-data">
+            <Button
+              text="Complete"
+              icon={FaCircleCheck}
+              className="mr-1"
+              onClick={onCompleteTask}
+              type="done"
+              isDisabled={!currentTask?.id}
+            />
 
-          <Button
-            icon={MdDelete}
-            onClick={onDeleteTask}
-            ariaLabel="delete"
-            type="delete"
-            isDisabled={!currentTask?.id}
-          />
+            <Button
+              className="mr-1"
+              icon={MdDelete}
+              onClick={onDeleteTask}
+              ariaLabel="delete"
+              type="delete"
+              isDisabled={!currentTask?.id}
+            />
+            <Button
+              icon={MdEdit}
+              onClick={onEdit}
+              ariaLabel="edit"
+              type="edit"
+              isDisabled={!currentTask?.id}
+            />
+          </div>
         </div>
       </section>
 
@@ -187,8 +211,8 @@ const MainWork = () => {
         done={() => {
           setTime(0);
           setTimerOn(false);
-          dispatch({ type: "global/deleteTask", payload: currentTask.id });
-          dispatch({ type: "global/deselectTask" });
+          dispatch({ type: 'global/deleteTask', payload: currentTask.id });
+          dispatch({ type: 'global/deselectTask' });
         }}
         buttonTextConfirm="Delete"
         buttonTextCancel="Cancel"

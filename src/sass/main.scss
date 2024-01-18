@@ -1,18 +1,19 @@
-@import "abstracts/mixins";
-@import "utils/utils";
-@import "base/base";
+@import 'utils/variables';
+@import 'utils/colors';
+@import 'abstracts/mixins';
+@import 'utils/utils';
+@import 'base/base';
 
-@import "layout/layout";
-@import "layout/sidebar";
-@import "components/button";
-@import "components/drag-list";
-@import "components/main-work";
-@import "components/modal";
-@import "components/form-tasks";
-@import "components/tooltip";
-@import "components/table-history";
-@import "components/icon-button";
-@import "components/floating-timer";
+@import 'layout/layout';
+@import 'layout/sidebar';
+@import 'components/button';
+@import 'components/main-work';
+@import 'components/modal';
+@import 'components/form-tasks';
+@import 'components/icon-button';
+@import 'components/floating-timer';
+@import 'components/list';
 
-@import "views/home";
-@import "views/history";
+@import 'views/home';
+@import 'views/history';
+@import 'views/dashboard';

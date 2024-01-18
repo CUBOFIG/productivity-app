@@ -2,8 +2,17 @@
   display: flex;
   height: 100%;
   flex-direction: column;
+  max-width: $max-width;
+  margin: 0 auto;
+  width: 100%;
 
   & button {
     margin-bottom: 1rem;
+  }
+
+  @include responsive(tablet) {
+    & button {
+      width: 200px;
+    }
   }
 }

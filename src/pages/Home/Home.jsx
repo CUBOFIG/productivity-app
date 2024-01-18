@@ -1,25 +1,25 @@
-import { IoMdAdd } from "react-icons/io";
-import { useState } from "react";
+import { IoMdAdd } from 'react-icons/io';
+import { useState } from 'react';
 import {
   DragList,
   MainWork,
   ModalFormTask,
   Button,
   Select,
-} from "../../components";
-import { useDispatch } from "react-redux";
+} from '../../components';
+import { useSelector } from 'react-redux';
 
 const selectOptions = [
-  { id: "id-short", name: "Short duration" },
-  { id: "id-medium", name: "Medium duration" },
-  { id: "id-long", name: "Long duration" },
+  { id: 'id-short', name: 'Short duration' },
+  { id: 'id-medium', name: 'Medium duration' },
+  { id: 'id-long', name: 'Long duration' },
 ];
 
 const Home = () => {
-  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [task, selectTask] = useState({});
-  const [durationType, setDurationType] = useState(0);
+  const [durationType, setDurationType] = useState(null);
+  const tasks = useSelector((state) => state.global.tasks);
 
   const onToggle = () => setIsOpen((prev) => !prev);
 
@@ -33,14 +33,9 @@ const Home = () => {
     selectTask({});
   };
 
-  const sortByDuration = (a) => {
-    setDurationType(a);
-    dispatch({ type: "global/sortByDuration", payload: a });
-  };
-
   return (
     <div className="home">
-      <MainWork />
+      <MainWork onEditTask={onEditTask} />
       <div className="d-flex container-buttons">
         <Button
           text="ADD"
@@ -54,12 +49,17 @@ const Home = () => {
           value={durationType}
           name="durationChoice"
           placeholder="Sort by duration"
-          onChange={(e) => sortByDuration(e)}
+          onChange={(type) => setDurationType(type)}
           options={selectOptions}
           required
+          disabled={tasks?.length <= 2}
         />
       </div>
-      <DragList onEditTask={onEditTask} />
+      <DragList
+        onEditTask={onEditTask}
+        typeSort={durationType}
+        setTypeSort={setDurationType}
+      />
       <ModalFormTask data={task} isOpen={isOpen} onToggle={onToggleModal} />
     </div>
   );

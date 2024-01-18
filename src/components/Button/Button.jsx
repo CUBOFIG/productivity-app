@@ -1,5 +1,5 @@
-import classNames from "classnames";
-import PropTypes from "prop-types";
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
 
 const Button = ({
   ariaLabel,
@@ -11,7 +11,7 @@ const Button = ({
   type,
   isDisabled,
 }) => {
-  const buttonClasses = classNames("button", className, type);
+  const buttonClasses = classNames('button', className, type);
 
   return (
     <button
@@ -21,7 +21,7 @@ const Button = ({
       aria-label={ariaLabel || text}
       disabled={isDisabled}
     >
-      {text && <p className={`button__text ${Icon ? "mr-1" : ""}`}>{text}</p>}
+      {text && <p className={`button__text ${Icon ? 'mr-1' : ''}`}>{text}</p>}
       {Icon && <Icon />}
     </button>
   );
@@ -45,3 +45,5 @@ Button.defaultProps = {
 };
 
 export default Button;
+
+//Este es un componente button que recibe como props un texto, un icono, una clase, un onClick, un ariaLabel, un formAction, un type y un isDisabled, principalmente.

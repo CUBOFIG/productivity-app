@@ -1,10 +1,11 @@
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
+//Componente HeaderItem que recibe como props un goTo, un text, un itemClass, un onClick y un icon, principalmente.
 const HeaderItem = ({ goTo, text, itemClass, onClick, icon: Icon }) => {
   return (
     <Link
-      className={`header-item ${itemClass || ""}`}
+      className={`header-item ${itemClass || ''}`}
       to={goTo}
       onClick={onClick}
     >
@@ -23,7 +24,7 @@ HeaderItem.propTypes = {
 };
 
 HeaderItem.defaultProps = {
-  itemClass: "",
+  itemClass: '',
   onClick: () => {},
   icon: null,
 };

@@ -1,11 +1,15 @@
-import { configureStore } from "@reduxjs/toolkit";
-import globalStoreSlice from "../redux/slices/globalStore";
+import { configureStore } from '@reduxjs/toolkit';
+import globalStoreSlice from '../redux/slices/globalStore';
 
 export const saveState = (state) => {
   try {
-    const serializedState = JSON.stringify(state);
+    const saveState = {
+      tasks: state.global.tasks,
+      endTasks: state.global.endTasks,
+    };
 
-    localStorage.setItem("state", serializedState);
+    const serializedState = JSON.stringify(saveState);
+    localStorage.setItem('state', serializedState);
   } catch (err) {
     console.error(err);
   }

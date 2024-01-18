@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const Select = ({
   options,
@@ -11,6 +11,7 @@ const Select = ({
   value,
   keyProp,
   disabledDefault,
+  disabled,
 }) => {
   const handleChange = (event) => {
     const selectedValue = event.target.value;
@@ -19,13 +20,14 @@ const Select = ({
 
   const findOptionValue = (key) => {
     const option = options.find((opt) => opt[keyProp] == key);
-    return option ? option[keyProp] : "";
+    return option ? option[keyProp] : '';
   };
 
   return (
     <div className="input-group">
       {label && <label htmlFor={id}>{label}</label>}
       <select
+        disabled={disabled}
         id={id}
         name={name}
         onChange={handleChange}
@@ -50,7 +52,7 @@ Select.propTypes = {
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       name: PropTypes.string.isRequired,
-    })
+    }),
   ),
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -61,16 +63,18 @@ Select.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   keyProp: PropTypes.string,
   disabledDefault: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 Select.defaultProps = {
   options: [],
   required: false,
   onChange: () => {},
-  placeholder: "",
-  keyProp: "id",
+  placeholder: '',
+  keyProp: 'id',
   disabledDefault: true,
-  label: "",
+  label: '',
+  disabled: false,
 };
 
 export default Select;
