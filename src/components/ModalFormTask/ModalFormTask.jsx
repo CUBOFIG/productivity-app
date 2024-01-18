@@ -21,6 +21,8 @@ const initialValues = {
   customDuration: '',
 };
 
+//Es el fomulario que se muestra en el modal para agregar o editar una tarea
+
 const ModalFormTask = ({ data, isOpen, onToggle }) => {
   const dispatch = useDispatch();
 
@@ -66,6 +68,9 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
         createdAt: isEdit ? data?.createdAt : new Date().toISOString(),
       };
 
+      //Si es editar se envia el tipo de accion global/editTask
+      //Si es agregar se envia el tipo de accion global/addTask
+
       const type = isEdit ? 'global/editTask' : 'global/addTask';
 
       dispatch({ type, payload: currentData });
@@ -98,13 +103,8 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   };
 
   const closeModal = () => {
-    setYourUniqueKey((prev) => prev + 1);
+    resetForm();
     onToggle();
-    setValues({
-      description: '',
-      durationChoice: '',
-      customDuration: '',
-    });
     setDisabledInput(true);
   };
 
@@ -135,6 +135,8 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
       resetForm();
     }
   }, [data]);
+
+  //Hacer focus en el input de descripcion cuando se abre el modal
 
   useEffect(() => {
     if (!isOpen) return;

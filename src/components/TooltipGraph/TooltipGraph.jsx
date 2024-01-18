@@ -24,8 +24,6 @@ CustomLabel.defaultEvents = VictoryTooltip.defaultEvents;
 const TooltipGraph = ({ data }) => {
   const objTask = processDataTooltipGraph(data);
 
-  console.log(objTask);
-
   return (
     <div className="chart">
       <VictoryPie
