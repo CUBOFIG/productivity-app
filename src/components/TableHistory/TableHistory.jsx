@@ -5,10 +5,12 @@ import { FaInfoCircle } from 'react-icons/fa';
 const TableHistory = () => {
   const endTasks = useSelector((state) => state.global.endTasks);
 
+  const reversedEndTasks = [...endTasks].reverse();
+
   return (
     <div className="list">
-      {endTasks.length >= 1 ? (
-        endTasks.map((task) => (
+      {reversedEndTasks.length >= 1 ? (
+        reversedEndTasks.map((task) => (
           <div className="card" key={task?.id}>
             <div className="container-description">
               <label htmlFor="description">DESCRIPTION</label>

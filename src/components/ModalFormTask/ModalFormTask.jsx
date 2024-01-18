@@ -80,26 +80,15 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
     [dispatch, isEdit, data, resetForm],
   );
 
+  //La funcion handleDurationChange se encarga de manejar el cambio de duracion
   const handleDurationChange = (value) => {
-    if (value === '4') {
-      setDisabledInput(false);
-      setValues((prev) => ({
-        ...prev,
-        ...{
-          durationChoice: value,
-          customDuration: '',
-        },
-      }));
-    } else {
-      setDisabledInput(true);
-      setValues((prev) => ({
-        ...prev,
-        ...{
-          durationChoice: value,
-          customDuration: '',
-        },
-      }));
-    }
+    isInputDisabled = value !== '4';
+    setDisabledInput(isInputDisabled);
+    setValues((prev) => ({
+      ...prev,
+      durationChoice: value,
+      customDuration: '',
+    }));
   };
 
   const closeModal = () => {
@@ -107,6 +96,8 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
     onToggle();
     setDisabledInput(true);
   };
+
+  //Si data.id existe es porque se esta editando una tarea
 
   useEffect(() => {
     if (data?.id) {

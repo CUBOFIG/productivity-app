@@ -41,8 +41,10 @@ Una vez con el proyecto, abrir una linea de comandos y pocisionarse dentro de la
 - npm install
 - npm run dev
 
+## Versión de Node
+
+- Se construyó en la versión v18.17.0
+
 ## Autor.
 
 - Heriberto Figueroa Michel
-
----
