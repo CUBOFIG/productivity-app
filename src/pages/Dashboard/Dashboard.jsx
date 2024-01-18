@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { FloatingTimer } from '../../components';
+import { FloatingTimer, TooltipGraph } from '../../components';
 import { useState, useEffect } from 'react';
 import {
   VictoryChart,
@@ -89,10 +89,18 @@ const Dashboard = () => {
     <div className="dashboard">
       <FloatingTimer />
       <h2 className="mb-2 mt-4">Dashboard</h2>
-      <h3>{minutos}</h3>
-      <div className="dashboard__container">
-        <Tabla data={tasks} />
-      </div>
+      {tasks.length > 0 ? (
+        <>
+          <div className="dashboard__container">
+            <h3>{minutos}</h3>
+            <Tabla data={tasks} />
+            <h3>{`Total tasks: ${tasks?.length}`}</h3>
+            <TooltipGraph data={tasks} />
+          </div>
+        </>
+      ) : (
+        <p>No tasks completed</p>
+      )}
     </div>
   );
 };

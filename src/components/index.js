@@ -9,3 +9,4 @@ export { default as TableHistory } from './TableHistory/TableHistory';
 export { default as IconButton } from './IconButton/IconButton';
 export { default as FloatingTimer } from './FloatingTimer/FloatingTimer';
 export { default as HeaderItem } from './HeaderItem/HeaderItem';
+export { default as TooltipGraph } from './TooltipGraph/TooltipGraph';

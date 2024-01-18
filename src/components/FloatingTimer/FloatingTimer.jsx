@@ -51,6 +51,8 @@ const FloatingTimer = () => {
       isInProgress: false,
     };
 
+    if (!dataToSave?.id) return;
+
     local.current = true;
     localStorage.setItem('master', JSON.stringify(dataToSave));
   };

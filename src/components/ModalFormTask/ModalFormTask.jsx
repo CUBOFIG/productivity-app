@@ -1,6 +1,7 @@
 import {
   convertSecondsToTimeFormat,
   convertTimeToSeconds,
+  generateIdByDuration,
 } from '../../utils/mixin';
 import { Input, Select, Button, Modal } from '..';
 import { useDispatch } from 'react-redux';
@@ -18,18 +19,6 @@ const initialValues = {
   description: '',
   durationChoice: '',
   customDuration: '',
-};
-
-const generateIdByDuration = (seconds) => {
-  const minutes = seconds / 60;
-
-  if (minutes <= 30) {
-    return 'id-short';
-  } else if (minutes <= 60 && minutes > 30) {
-    return 'id-medium';
-  } else {
-    return 'id-long';
-  }
 };
 
 const ModalFormTask = ({ data, isOpen, onToggle }) => {

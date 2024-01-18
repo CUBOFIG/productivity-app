@@ -61,11 +61,11 @@ const DragList = ({ onEditTask, typeSort, setTypeSort }) => {
   };
 
   const selectTask = (id) => () => {
-    const data = rows.find((e) => e.id === id);
-    const newData = rows.filter((e) => e.id !== id);
-    const a = [data, ...newData];
+    const data = rows.find((element) => element.id === id);
+    const newData = rows.filter((element) => element.id !== id);
+    const selectData = [data, ...newData];
 
-    dispatch({ type: 'global/changeTask', payload: a });
+    dispatch({ type: 'global/changeTask', payload: selectData });
   };
 
   const editTask = (task) => () => {

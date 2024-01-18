@@ -134,6 +134,8 @@ const MainWork = ({ onEditTask }) => {
       isInProgress: isPlayRef.current,
     };
 
+    if (!dataToSave?.id) return;
+
     local.current = true;
     localStorage.setItem('master', JSON.stringify(dataToSave));
   };
