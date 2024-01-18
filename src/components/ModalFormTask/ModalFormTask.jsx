@@ -82,7 +82,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
 
   //La funcion handleDurationChange se encarga de manejar el cambio de duracion
   const handleDurationChange = (value) => {
-    isInputDisabled = value !== '4';
+    const isInputDisabled = value !== '4';
     setDisabledInput(isInputDisabled);
     setValues((prev) => ({
       ...prev,

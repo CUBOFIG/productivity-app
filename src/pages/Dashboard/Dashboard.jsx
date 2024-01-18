@@ -92,10 +92,14 @@ const Dashboard = () => {
       {tasks.length > 0 ? (
         <>
           <div className="dashboard__container">
-            <h3>{minutos}</h3>
-            <Tabla data={tasks} />
-            <h3>{`Total tasks: ${tasks?.length}`}</h3>
-            <TooltipGraph data={tasks} />
+            <div>
+              <h3>{minutos}</h3>
+              <h3>{`Total tasks: ${tasks?.length}`}</h3>
+            </div>
+            <div>
+              <Tabla data={tasks} />
+              <TooltipGraph data={tasks} />
+            </div>
           </div>
         </>
       ) : (

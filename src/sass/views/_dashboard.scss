@@ -21,9 +21,8 @@
     border-radius: 0.4rem;
     overflow-y: auto;
 
-    & > h3:nth-child(3) {
-      margin-top: 1rem !important;
-      margin-bottom: 0;
+    & > div:last-child {
+      margin-top: 1rem;
     }
   }
 
@@ -31,6 +30,7 @@
     height: auto;
     width: 100%;
     justify-content: center;
+    display: flex;
 
     .VictoryContainer {
       height: auto !important;
@@ -40,10 +40,18 @@
     }
   }
 
-  @include responsive(tablet) {
+  @include responsive(desktop) {
     .chart {
       display: flex;
-      height: 100%;
+      height: auto;
+    }
+
+    &__container {
+      & > div:last-child {
+        margin-top: 1rem;
+        flex-direction: row;
+        display: flex;
+      }
     }
   }
 }

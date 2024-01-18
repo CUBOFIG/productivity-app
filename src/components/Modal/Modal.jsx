@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Button from "../Button/Button";
+import { useEffect } from 'react';
+import classNames from 'classnames';
+import PropTypes from 'prop-types';
+import Button from '../Button/Button';
 
 const Modal = ({
   onToggle,
@@ -14,27 +14,26 @@ const Modal = ({
   messageModal,
   children,
 }) => {
-  const linkClasses = classNames("modal", {
-    "modal__is-open": isOpen,
+  const linkClasses = classNames('modal', {
+    'modal__is-open': isOpen,
   });
 
-  const containerClass = classNames("modal__content", {
+  const containerClass = classNames('modal__content', {
     modal__simplemodal: isSimpleModal,
   });
 
   useEffect(() => {
-    document.body.style.overflowY = isOpen ? "hidden" : "scroll";
+    document.body.style.overflowY = isOpen ? 'hidden' : 'scroll';
   }, [isOpen]);
 
-  const onDone = () => {
-    done();
+  const createToggleFunction = (originalFunction) => () => {
+    originalFunction();
     onToggle();
   };
 
-  const onDiscard = () => {
-    discard();
-    onToggle();
-  };
+  const onDone = createToggleFunction(done);
+
+  const onDiscard = createToggleFunction(discard);
 
   return (
     <>

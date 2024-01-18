@@ -4,7 +4,6 @@ import { FaInfoCircle } from 'react-icons/fa';
 
 const TableHistory = () => {
   const endTasks = useSelector((state) => state.global.endTasks);
-
   const reversedEndTasks = [...endTasks].reverse();
 
   return (

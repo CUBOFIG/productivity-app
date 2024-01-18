@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import useTimer from '../../hooks/useTimer';
 import { IconButton, Button, Modal } from '..';
 import { GrPowerReset } from 'react-icons/gr';
+import { formatTime } from '../../utils/mixin';
 
 const MainWork = ({ onEditTask }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,8 @@ const MainWork = ({ onEditTask }) => {
     setTimerOn(false);
   };
 
+  //Esta funcion es para cuando se completa la tarea, se guarda el tiempo trabajado.
+
   const onCompleteTask = () => {
     dispatch({
       type: 'global/completeCurrentTask',
@@ -39,6 +42,8 @@ const MainWork = ({ onEditTask }) => {
     setTimerOn(false);
   };
 
+  //Estas dos funciones son para abrir el modal de confirmacion de eliminar tarea y editar tarea.
+
   const onDeleteTask = () => {
     setIsOpenDelete(true);
   };
@@ -47,15 +52,7 @@ const MainWork = ({ onEditTask }) => {
     onEditTask(currentTask);
   };
 
-  const formatTime = () => {
-    const hours = Math.floor(time / 3600);
-    const minutes = Math.floor((time % 3600) / 60);
-    const seconds = time % 60;
-
-    return [hours, minutes, seconds]
-      .map((val) => `0${val}`.slice(-2))
-      .join(':');
-  };
+  //saveTask es para guardar el tiempo trabajado en el currentTask, cuando se cambia de elemento en el listado.
 
   const saveTask = () => {
     if (!currentTask.id) return;
@@ -90,9 +87,13 @@ const MainWork = ({ onEditTask }) => {
     if (currentTask.isInProgress) setTimerOn(true);
   }, [currentTask]);
 
+  //Este useEffect es para cuando se completa la tarea, se guarda el tiempo trabajado.
+
   useEffect(() => {
     if (isComplete) onCompleteTask();
   }, [isComplete]);
+
+  //Este useEffect es para cuando se cambia de elemento en el listado, si cambia el currentTask por otro, se guarda el tiempo trabajado.
 
   useEffect(() => {
     currentTaskRef.current = currentTask;
@@ -112,6 +113,8 @@ const MainWork = ({ onEditTask }) => {
       });
     }
   }, [dispatch]);
+
+  //Este useEffect es para cuando se cierra la pagina, se guarda el tiempo trabajado.
 
   useEffect(() => {
     return () => {
@@ -154,7 +157,7 @@ const MainWork = ({ onEditTask }) => {
       <section className="main-work">
         <header>
           <h1>{currentTask?.description || ''}</h1>
-          <p>{formatTime()}</p>
+          <p>{formatTime(time)}</p>
         </header>
         <div className="main-work__section-control">
           <div className="main-actions">
