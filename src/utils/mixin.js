@@ -39,6 +39,20 @@ const generateRandomCode = () => {
   return result;
 };
 
+// La funcion generateIdByDuration genera un id de tarea dependiendo de la duracion.
+
+export const generateIdByDuration = (seconds) => {
+  const minutes = seconds / 60;
+
+  if (minutes <= 30) {
+    return 'id-short';
+  } else if (minutes <= 60 && minutes > 30) {
+    return 'id-medium';
+  } else {
+    return 'id-long';
+  }
+};
+
 // La funcion generateFakeTasks genera un array de tareas falsas.
 
 export const generateFakeTasks = () => {
@@ -63,6 +77,7 @@ export const generateFakeTasks = () => {
       durationReset: 0,
       remainingTime: remainingTime,
       completedAt: taskDate.toISOString(),
+      type: generateIdByDuration(duration),
     });
   }
 
@@ -181,4 +196,25 @@ export const formatDate = (date) => {
   const year = originalDate.getFullYear().toString();
 
   return `${month}/${day}/${year}`;
+};
+
+//
+export const processDataTooltipGraph = (dataTypes) => {
+  const typeCounts = {};
+
+  dataTypes.forEach((item) => {
+    if (item.type && typeof item.type === 'string') {
+      typeCounts[item.type] = (typeCounts[item.type] || 0) + 1;
+    }
+  });
+
+  const data = Object.keys(typeCounts).map((type) => ({
+    x: typeCounts[type],
+    y: type,
+  }));
+
+  return {
+    total: dataTypes.length,
+    data,
+  };
 };
