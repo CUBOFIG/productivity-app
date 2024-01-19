@@ -17,10 +17,10 @@ const History = () => {
       <h2 className="mb-2 mt-4">History</h2>
 
       <Button
-        text="Generate fake history"
-        icon={TbLayoutGridAdd}
         className="mr-1"
+        icon={TbLayoutGridAdd}
         onClick={generateFakeHistory}
+        text="Generate fake history"
       />
       <TableHistory />
     </div>

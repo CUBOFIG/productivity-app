@@ -30,18 +30,18 @@ const Sidebar = ({ onToggle, isOpen }) => {
             <ul>
               <li>
                 <HeaderItem
-                  icon={GoHomeFill}
                   goTo="/"
-                  text="Home"
+                  icon={GoHomeFill}
                   onClick={onToggle}
+                  text="Home"
                 />
               </li>
               <li>
                 <HeaderItem
-                  icon={GoGraph}
                   goTo="dashboard"
-                  text="Dashboard"
+                  icon={GoGraph}
                   onClick={onToggle}
+                  text="Dashboard"
                 />
               </li>
               <li>

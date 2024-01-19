@@ -16,21 +16,24 @@ const selectOptions = [
 ];
 
 const Home = () => {
+  const tasks = useSelector((state) => state.global.tasks);
   const [isOpen, setIsOpen] = useState(false);
   const [task, selectTask] = useState({});
   const [durationType, setDurationType] = useState(null);
-  const tasks = useSelector((state) => state.global.tasks);
 
   const onToggle = () => setIsOpen((prev) => !prev);
 
-  const onEditTask = (task) => {
-    selectTask(task);
+  const ToggleCustomFunction = (otherFunction) => {
+    otherFunction();
     onToggle();
   };
 
+  const onEditTask = (task) => {
+    ToggleCustomFunction(() => selectTask(task));
+  };
+
   const onToggleModal = () => {
-    onToggle();
-    selectTask({});
+    ToggleCustomFunction(selectTask);
   };
 
   return (
@@ -38,27 +41,28 @@ const Home = () => {
       <MainWork onEditTask={onEditTask} />
       <div className="d-flex container-buttons">
         <Button
-          text="ADD"
+          className="mb-2 mr-2"
           icon={IoMdAdd}
           onClick={onToggle}
-          className="mb-2 mr-2"
+          text="ADD"
         />
         <Select
+          disabled={tasks?.length <= 2}
           disabledDefault={false}
           id="duration-choice"
-          value={durationType}
           name="durationChoice"
-          placeholder="Sort by duration"
           onChange={(type) => setDurationType(type)}
           options={selectOptions}
+          placeholder="Sort by duration"
           required
-          disabled={tasks?.length <= 2}
+          value={durationType}
         />
       </div>
       <DragList
         onEditTask={onEditTask}
-        typeSort={durationType}
         setTypeSort={setDurationType}
+        tasks={tasks}
+        typeSort={durationType}
       />
       <ModalFormTask data={task} isOpen={isOpen} onToggle={onToggleModal} />
     </div>

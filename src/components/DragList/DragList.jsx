@@ -14,9 +14,13 @@ import { convertSecondsToTimeFormat, sortByType } from '../../utils/mixin';
 // El uso del onEditTask es para editar una tarea, el typeSort es para ordenar las tareas por tipo y el setTypeSort es para establecer el tipo de ordenamiento.
 //Se pasaron por aqui para simplificar el componente MainWork.jsx
 
-const DragList = ({ onEditTask, typeSort, setTypeSort }) => {
+const DragList = ({
+  onEditTask,
+  setTypeSort,
+  tasks: stateListElements,
+  typeSort,
+}) => {
   const dispatch = useDispatch();
-  const stateListElements = useSelector((state) => state.global.tasks);
   const [rows, setRows] = useState([]);
   const currentTask = useSelector((state) => state.global.currentTask);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
@@ -54,10 +58,8 @@ const DragList = ({ onEditTask, typeSort, setTypeSort }) => {
     setIsOpenDelete(true);
   };
 
-  const completeElement = (task) => {
-    return () => {
-      dispatch({ type: 'global/completeListTask', payload: task });
-    };
+  const completeElement = (task) => () => {
+    dispatch({ type: 'global/completeListTask', payload: task });
   };
 
   const selectTask = (id) => () => {
