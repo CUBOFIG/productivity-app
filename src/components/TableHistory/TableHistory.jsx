@@ -20,7 +20,7 @@ const TableHistory = () => {
             <div className="container-info">
               <div>
                 <label htmlFor="Duration">DURATION</label>
-                {convertSecondsToTimeFormat(task?.duration)}
+                {convertSecondsToTimeFormat(task?.initialDuration)}
               </div>
               <div>
                 <label htmlFor="Duration">TIME REMAINING</label>

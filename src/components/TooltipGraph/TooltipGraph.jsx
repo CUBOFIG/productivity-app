@@ -1,5 +1,6 @@
-import { VictoryLabel, VictoryTooltip, VictoryPie } from 'victory';
-import { processDataTooltipGraph } from '../../utils/mixin';
+import { VictoryLabel, VictoryTooltip, VictoryPie } from "victory";
+import { processDataTooltipGraph } from "../../utils/mixin";
+import PropTypes from "prop-types";
 
 const CustomLabel = (props) => (
   <g>
@@ -13,7 +14,7 @@ const CustomLabel = (props) => (
       cornerRadius={50}
       flyoutWidth={100}
       flyoutHeight={100}
-      flyoutStyle={{ fill: '#646cff' }}
+      flyoutStyle={{ fill: "#646cff" }}
       text={({ datum }) => `amount: ${datum.x}`}
     />
   </g>
@@ -27,7 +28,7 @@ const TooltipGraph = ({ data }) => {
   return (
     <div className="chart">
       <VictoryPie
-        style={{ labels: { fill: 'white' } }}
+        style={{ labels: { fill: "white" } }}
         innerRadius={100}
         labelRadius={120}
         labels={({ datum }) => `${datum.y}`}
@@ -36,6 +37,15 @@ const TooltipGraph = ({ data }) => {
       />
     </div>
   );
+};
+
+TooltipGraph.propTypes = {
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      x: PropTypes.any,
+      y: PropTypes.any,
+    })
+  ).isRequired,
 };
 
 export default TooltipGraph;

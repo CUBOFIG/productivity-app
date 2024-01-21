@@ -7,7 +7,7 @@ import { FaInfoCircle } from 'react-icons/fa';
 const FloatingTimer = () => {
   const dispatch = useDispatch();
   const currentTask = useSelector((state) => state.global.currentTask);
-  const { time, setTime, setTimerOn } = useTimer();
+  const { time, setTime, setTimerOn, timerOn } = useTimer();
   const currentTaskRef = useRef(currentTask);
   const timeRef = useRef(time);
   const local = useRef(false);
@@ -42,6 +42,21 @@ const FloatingTimer = () => {
       cleanup();
     };
   }, [cleanup]);
+
+  //UseEffect para verificar que si llega el timer a 0 se complete la tarea.
+
+  useEffect(() => {
+    if (time === 0 && currentTask?.id && timerOn) {
+      dispatch({
+        type: 'global/completeCurrentTask',
+        payload: {
+          ...currentTaskRef.current,
+          //En cero siempre porque ya se completo la tarea.
+          remainingTime: 0,
+        },
+      });
+    }
+  }, [time]);
 
   //Esta seccion de codigo es para guardar la info del currentTask trabajado en el localstorage, para que no se pierda si se recarga la pagina.
   const saveData = () => {

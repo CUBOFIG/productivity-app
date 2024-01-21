@@ -1,8 +1,8 @@
 // La funcion convertTimeToSeconds convierte un string de tiempo en segundos.
 
 export const convertTimeToSeconds = (timeString) => {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  return (hours * 60 + minutes) * 60;
+  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  return (hours * 60 + minutes) * 60 + seconds;
 };
 
 // La funcion convertSecondsToTimeFormat convierte segundos en un string de tiempo.
@@ -10,11 +10,13 @@ export const convertTimeToSeconds = (timeString) => {
 export const convertSecondsToTimeFormat = (totalSeconds) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
 
   const formattedHours = hours.toString().padStart(2, '0');
   const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = seconds.toString().padStart(2, '0');
 
-  return `${formattedHours}:${formattedMinutes}`;
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 };
 
 // La funcion formatTime convierte segundos en un string de tiempo.
@@ -74,6 +76,7 @@ export const generateFakeTasks = () => {
       id: crypto.randomUUID(),
       description: `Task-${codeSection}-${i}`,
       duration: duration,
+      initialDuration: duration,
       durationReset: 0,
       remainingTime: remainingTime,
       completedAt: taskDate.toISOString(),
@@ -86,34 +89,22 @@ export const generateFakeTasks = () => {
 
 // La funcion sortByType ordena las tareas por tipo.
 
+const typePriority = {
+  'id-short': { 'id-short': 0, 'id-medium': 1, 'id-long': 2 },
+  'id-medium': { 'id-medium': 0, 'id-long': 1, 'id-short': 2 },
+  'id-long': { 'id-long': 0, 'id-medium': 1, 'id-short': 2 },
+};
+
 export const sortByType = (tasks, type) => {
-  const order = {
-    'id-short': ['id-short', 'id-medium', 'id-long'],
-    'id-medium': ['id-medium', 'id-long', 'id-short'],
-    'id-long': ['id-long', 'id-medium', 'id-short'],
-  };
+  const priority = typePriority[type];
 
-  const sortPriority = order?.[type] || null;
-
-  if (sortPriority) {
-    const typePriority = sortPriority.reduce((acc, type, index) => {
-      acc[type] = index;
-      return acc;
-    }, {});
-
-    const sortedArray = [...tasks].sort(
-      (a, b) => typePriority[a.type] - typePriority[b.type],
-    );
-
-    return sortedArray;
+  if (priority) {
+    return [...tasks].sort((a, b) => priority[a.type] - priority[b.type]);
   } else {
-    const sortedArray = [...tasks].sort((a, b) => {
-      const dateA = new Date(a.createdAt);
-      const dateB = new Date(b.createdAt);
-      return dateA - dateB;
-    });
-
-    return sortedArray;
+    // Convertir createdAt a Date una sola vez
+    return tasks
+      .map((task) => ({ ...task, createdAt: new Date(task.createdAt) }))
+      .sort((a, b) => a.createdAt - b.createdAt);
   }
 };
 

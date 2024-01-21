@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { FaPlay, FaPause } from 'react-icons/fa';
-import { FaCircleCheck } from 'react-icons/fa6';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import useTimer from '../../hooks/useTimer';
-import { IconButton, Button, Modal } from '..';
-import { GrPowerReset } from 'react-icons/gr';
-import { formatTime } from '../../utils/mixin';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FaPlay, FaPause } from "react-icons/fa";
+import { FaCircleCheck } from "react-icons/fa6";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { useDispatch, useSelector } from "react-redux";
+import useTimer from "../../hooks/useTimer";
+import { IconButton, Button, Modal } from "..";
+import { GrPowerReset } from "react-icons/gr";
+import { formatTime } from "../../utils/mixin";
+import PropTypes from "prop-types";
 
-const MainWork = ({ onEditTask }) => {
+const MainWork = ({ onEditTask, currentTask }) => {
   const dispatch = useDispatch();
 
   const [isOpenDelete, setIsOpenDelete] = useState(false);
-  const currentTask = useSelector((state) => state.global.currentTask);
   const switchChange = useSelector((state) => state.global.actions.changeTask);
   const { time, setTime, timerOn, setTimerOn, isComplete } = useTimer();
 
@@ -21,17 +21,35 @@ const MainWork = ({ onEditTask }) => {
   const isPlayRef = useRef(false);
 
   const startTimer = () => setTimerOn(true);
-  const pauseTimer = () => setTimerOn(false);
+
+  const pauseTimer = () => {
+    setTimerOn(false);
+    dispatch({
+      type: "global/editTask",
+      payload: {
+        ...currentTask,
+        duration: time,
+      },
+    });
+  };
+
   const resetTimer = () => {
     setTime(currentTask?.initialDuration || 0);
     setTimerOn(false);
+    dispatch({
+      type: "global/editTask",
+      payload: {
+        ...currentTask,
+        remainingTime: currentTask?.time,
+      },
+    });
   };
 
   //Esta funcion es para cuando se completa la tarea, se guarda el tiempo trabajado.
 
   const onCompleteTask = () => {
     dispatch({
-      type: 'global/completeCurrentTask',
+      type: "global/completeCurrentTask",
       payload: {
         ...currentTask,
         remainingTime: time,
@@ -48,10 +66,6 @@ const MainWork = ({ onEditTask }) => {
     setIsOpenDelete(true);
   };
 
-  const onEdit = () => {
-    onEditTask(currentTask);
-  };
-
   //saveTask es para guardar el tiempo trabajado en el currentTask, cuando se cambia de elemento en el listado.
 
   const saveTask = () => {
@@ -64,7 +78,7 @@ const MainWork = ({ onEditTask }) => {
     };
 
     dispatch({
-      type: 'global/updateTasksWithId',
+      type: "global/updateTasksWithId",
       payload: {
         data,
         tasks: switchChange?.data,
@@ -104,7 +118,7 @@ const MainWork = ({ onEditTask }) => {
   const cleanup = useCallback(() => {
     if (currentTaskRef.current.id && timeRef.current && isPlayRef.current) {
       dispatch({
-        type: 'global/updateCurrentTask',
+        type: "global/updateCurrentTask",
         payload: {
           ...currentTaskRef.current,
           duration: timeRef.current,
@@ -140,15 +154,15 @@ const MainWork = ({ onEditTask }) => {
     if (!dataToSave?.id) return;
 
     local.current = true;
-    localStorage.setItem('master', JSON.stringify(dataToSave));
+    localStorage.setItem("master", JSON.stringify(dataToSave));
   };
 
   useEffect(() => {
     if (local.current) return;
     const handleBeforeUnload = () => saveData();
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -156,7 +170,7 @@ const MainWork = ({ onEditTask }) => {
     <>
       <section className="main-work">
         <header>
-          <h1>{currentTask?.description || ''}</h1>
+          <h1>{currentTask?.description || ""}</h1>
           <p>{formatTime(time)}</p>
         </header>
         <div className="main-work__section-control">
@@ -165,13 +179,13 @@ const MainWork = ({ onEditTask }) => {
               icon={FaPlay}
               onClick={startTimer}
               isDisabled={!currentTask?.id}
-              className={timerOn ? 'active' : ''}
+              className={timerOn ? "active" : ""}
             />
             <IconButton
               icon={FaPause}
               onClick={pauseTimer}
               isDisabled={!currentTask?.id}
-              className={!timerOn ? 'active' : ''}
+              className={!timerOn ? "active" : ""}
             />
             <IconButton
               icon={GrPowerReset}
@@ -200,7 +214,7 @@ const MainWork = ({ onEditTask }) => {
             />
             <Button
               icon={MdEdit}
-              onClick={onEdit}
+              onClick={() => onEditTask(currentTask)}
               ariaLabel="edit"
               type="edit"
               isDisabled={!currentTask?.id}
@@ -216,8 +230,8 @@ const MainWork = ({ onEditTask }) => {
         done={() => {
           setTime(0);
           setTimerOn(false);
-          dispatch({ type: 'global/deleteTask', payload: currentTask.id });
-          dispatch({ type: 'global/deselectTask' });
+          dispatch({ type: "global/deleteTask", payload: currentTask.id });
+          dispatch({ type: "global/deselectTask" });
         }}
         buttonTextConfirm="Delete"
         buttonTextCancel="Cancel"
@@ -225,6 +239,11 @@ const MainWork = ({ onEditTask }) => {
       />
     </>
   );
+};
+
+MainWork.propTypes = {
+  onEditTask: PropTypes.func.isRequired,
+  currentTask: PropTypes.any,
 };
 
 export default MainWork;
