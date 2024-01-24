@@ -27,13 +27,11 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
   const dispatch = useDispatch();
 
   const [disabledInput, setDisabledInput] = useState(true);
-  const [yourUniqueKey, setYourUniqueKey] = useState(0);
   const [values, setValues] = useState(initialValues);
   const [isEdit, setIsEdit] = useState(false);
 
   const resetForm = useCallback(() => {
     setValues(initialValues);
-    setYourUniqueKey((prev) => prev + 1);
   }, [onToggle]);
 
   const onHandleSubmite = useCallback(
@@ -74,7 +72,6 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
       const type = isEdit ? "global/editTask" : "global/addTask";
 
       dispatch({ type, payload: currentData });
-      setYourUniqueKey((prev) => prev + 1);
       closeModal();
     },
     [dispatch, isEdit, data, resetForm]
@@ -139,7 +136,7 @@ const ModalFormTask = ({ data, isOpen, onToggle }) => {
 
   return (
     <Modal isOpen={isOpen} onToggle={closeModal}>
-      <section className="form-task" key={yourUniqueKey}>
+      <section className="form-task">
         <h2 className="mb-2">{isEdit ? "Edit task" : "Add task"}</h2>
         <form
           onSubmit={onHandleSubmite}
