@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { getInitialState } from '../../utils/mixin';
+import { createSlice } from "@reduxjs/toolkit";
+import { getInitialState } from "../../utils/mixin";
 
 //Estado inicial default
 
@@ -19,27 +19,18 @@ const defaultInitialState = {
 //Esta funcion obtiene el estado del localStorage y lo agrega al estado inicial default.
 
 export const globalStoreSlice = createSlice({
-  name: 'global',
+  name: "global",
   initialState: {
     ...getInitialState(defaultInitialState),
   },
   reducers: {
     //Aca se crean las funciones que modifican el estado global.
     addTask: (state, action) => {
-      if (state.tasks.length > 1) {
-        const mainTasks = state.tasks[0];
-        const restArray = state.tasks.slice(1);
-
-        let data = [...restArray, action.payload];
-
-        state.tasks = [mainTasks, ...data];
-      } else {
-        state.tasks = [...state.tasks, action.payload];
-      }
+      state.tasks = [...state.tasks, action.payload];
     },
     deleteTask: (state, action) => {
       const filteredTasks = state.tasks.filter(
-        (task) => task.id !== action.payload,
+        (task) => task.id !== action.payload
       );
 
       state.tasks = filteredTasks;
@@ -50,7 +41,7 @@ export const globalStoreSlice = createSlice({
     },
     editTask: (state, action) => {
       state.tasks = state.tasks.map((task) =>
-        task.id === action.payload.id ? action.payload : task,
+        task.id === action.payload.id ? action.payload : task
       );
 
       if (state.currentTask.id === action.payload.id)
@@ -62,7 +53,7 @@ export const globalStoreSlice = createSlice({
     completeCurrentTask: (state, action) => {
       if (action.payload?.id) {
         state.tasks = state.tasks.filter(
-          (task) => task.id !== action.payload.id,
+          (task) => task.id !== action.payload.id
         );
 
         state.endTasks = [
@@ -79,7 +70,7 @@ export const globalStoreSlice = createSlice({
     completeListTask: (state, action) => {
       if (action.payload?.id) {
         state.tasks = state.tasks.filter(
-          (task) => task.id !== action.payload.id,
+          (task) => task.id !== action.payload.id
         );
 
         state.endTasks = [
@@ -106,7 +97,7 @@ export const globalStoreSlice = createSlice({
     },
     updateTasksWithId: (state, action) => {
       const newTasks = action.payload.tasks.map((task) =>
-        task.id === action.payload.data.id ? action.payload.data : task,
+        task.id === action.payload.data.id ? action.payload.data : task
       );
 
       state.tasks = newTasks;

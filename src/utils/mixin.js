@@ -1,7 +1,7 @@
 // La funcion convertTimeToSeconds convierte un string de tiempo en segundos.
 
 export const convertTimeToSeconds = (timeString) => {
-  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  const [hours, minutes, seconds] = timeString.split(":").map(Number);
   return (hours * 60 + minutes) * 60 + seconds;
 };
 
@@ -12,9 +12,9 @@ export const convertSecondsToTimeFormat = (totalSeconds) => {
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
 
-  const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = minutes.toString().padStart(2, '0');
-  const formattedSeconds = seconds.toString().padStart(2, '0');
+  const formattedHours = hours.toString().padStart(2, "0");
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
 
   return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 };
@@ -26,14 +26,14 @@ export const formatTime = (time) => {
   const minutes = Math.floor((time % 3600) / 60);
   const seconds = time % 60;
 
-  return [hours, minutes, seconds].map((val) => `0${val}`.slice(-2)).join(':');
+  return [hours, minutes, seconds].map((val) => `0${val}`.slice(-2)).join(":");
 };
 
 // la funcion generateRandomCode genera un codigo aleatorio de 3 letras, esta no se exporta porque solo se usa en la funcion generateFakeTasks.
 
 const generateRandomCode = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  let result = '';
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let result = "";
   for (let i = 0; i < 3; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters[randomIndex];
@@ -47,11 +47,11 @@ export const generateIdByDuration = (seconds) => {
   const minutes = seconds / 60;
 
   if (minutes <= 30) {
-    return 'id-short';
+    return "id-short";
   } else if (minutes <= 60 && minutes > 30) {
-    return 'id-medium';
+    return "id-medium";
   } else {
-    return 'id-long';
+    return "id-long";
   }
 };
 
@@ -77,7 +77,6 @@ export const generateFakeTasks = () => {
       description: `Task-${codeSection}-${i}`,
       duration: duration,
       initialDuration: duration,
-      durationReset: 0,
       remainingTime: remainingTime,
       completedAt: taskDate.toISOString(),
       type: generateIdByDuration(duration),
@@ -90,9 +89,9 @@ export const generateFakeTasks = () => {
 // La funcion sortByType ordena las tareas por tipo.
 
 const typePriority = {
-  'id-short': { 'id-short': 0, 'id-medium': 1, 'id-long': 2 },
-  'id-medium': { 'id-medium': 0, 'id-long': 1, 'id-short': 2 },
-  'id-long': { 'id-long': 0, 'id-medium': 1, 'id-short': 2 },
+  "id-short": { "id-short": 0, "id-medium": 1, "id-long": 2 },
+  "id-medium": { "id-medium": 0, "id-long": 1, "id-short": 2 },
+  "id-long": { "id-long": 0, "id-medium": 1, "id-short": 2 },
 };
 
 export const sortByType = (tasks, type) => {
@@ -112,8 +111,8 @@ export const sortByType = (tasks, type) => {
 
 export const getInitialState = (defaultState) => {
   try {
-    const persistedState = localStorage.getItem('state');
-    const persistedMainState = localStorage.getItem('master');
+    const persistedState = localStorage.getItem("state");
+    const persistedMainState = localStorage.getItem("master");
 
     const newState = { ...defaultState };
 
@@ -121,7 +120,6 @@ export const getInitialState = (defaultState) => {
       const data = JSON.parse(persistedState);
       newState.endTasks = data?.endTasks || [];
       newState.tasks = data?.tasks || [];
-      newState.sortByType = data?.sortByType || '';
     }
 
     if (persistedMainState && newState.tasks?.length >= 1) {
@@ -138,35 +136,29 @@ export const getInitialState = (defaultState) => {
 // La funcion processData procesa los datos para el grafico de barras.
 
 export const processData = (data) => {
+  const daysOfWeek = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miércoles",
+    "Jueves",
+    "Viernes",
+    "Sábado",
+  ];
+
   const counts = data.reduce((acc, task) => {
     if (!task.completedAt) return acc;
     const date = new Date(task.completedAt);
-    const dayOfWeek = [
-      'Domingo',
-      'Lunes',
-      'Martes',
-      'Miércoles',
-      'Jueves',
-      'Viernes',
-      'Sábado',
-    ][date.getDay()];
+
+    const dayOfWeek = daysOfWeek[date.getDay()];
     acc[dayOfWeek] = (acc[dayOfWeek] || 0) + 1;
     return acc;
   }, {});
 
   const today = new Date().getDay();
-  const daysOrder = [
-    'Domingo',
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-    'Sábado',
-  ];
 
   const getDistanceToToday = (day) => {
-    const index = daysOrder.indexOf(day);
+    const index = daysOfWeek.indexOf(day);
     return (today - index + 7) % 7;
   };
 
@@ -182,8 +174,8 @@ export const processData = (data) => {
 
 export const formatDate = (date) => {
   const originalDate = new Date(date);
-  const day = originalDate.getDate().toString().padStart(2, '0');
-  const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
+  const day = originalDate.getDate().toString().padStart(2, "0");
+  const month = (originalDate.getMonth() + 1).toString().padStart(2, "0");
   const year = originalDate.getFullYear().toString();
 
   return `${month}/${day}/${year}`;
@@ -194,7 +186,7 @@ export const processDataTooltipGraph = (dataTypes) => {
   const typeCounts = {};
 
   dataTypes.forEach((item) => {
-    if (item.type && typeof item.type === 'string') {
+    if (item.type && typeof item.type === "string") {
       typeCounts[item.type] = (typeCounts[item.type] || 0) + 1;
     }
   });

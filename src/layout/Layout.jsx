@@ -1,9 +1,9 @@
-import Sidebar from './Sidebar/Sidebar';
-import { Outlet } from 'react-router-dom';
-import useToggleSidebar from '../hooks/useToggleSidebar';
+import Sidebar from "./Sidebar/Sidebar";
+import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 const Layout = () => {
-  const [toggle, setToggle] = useToggleSidebar();
+  const [toggle, setToggle] = useState(false);
 
   return (
     <div className="layout">

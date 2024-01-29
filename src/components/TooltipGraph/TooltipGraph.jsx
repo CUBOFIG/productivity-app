@@ -40,12 +40,7 @@ const TooltipGraph = ({ data }) => {
 };
 
 TooltipGraph.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.any,
-      y: PropTypes.any,
-    })
-  ).isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default TooltipGraph;

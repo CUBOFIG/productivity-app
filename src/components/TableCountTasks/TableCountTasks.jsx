@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { processData } from "../../utils/mixin";
 import {
   VictoryChart,
@@ -10,16 +9,7 @@ import {
 import PropTypes from "prop-types";
 
 const TableCountTasks = ({ data }) => {
-  const [taskData, setTaskData] = useState([]);
-
-  useEffect(() => {
-    if (!data || data.length === 0) {
-      return;
-    }
-
-    const processedData = processData(data);
-    setTaskData(processedData);
-  }, [data]);
+  const taskData = processData(data);
 
   return (
     <div className="chart">
@@ -80,12 +70,7 @@ const TableCountTasks = ({ data }) => {
 };
 
 TableCountTasks.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.any,
-      y: PropTypes.any,
-    })
-  ).isRequired,
+  data: PropTypes.array.isRequired,
 };
 
 export default TableCountTasks;

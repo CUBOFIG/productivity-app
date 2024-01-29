@@ -1,8 +1,8 @@
-import { useDispatch, useSelector } from 'react-redux';
-import useTimer from '../../hooks/useTimer';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { formatTime } from '../../utils/mixin';
-import { FaInfoCircle } from 'react-icons/fa';
+import { useDispatch, useSelector } from "react-redux";
+import useTimer from "../../hooks/useTimer";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { formatTime } from "../../utils/mixin";
+import { FaInfoCircle } from "react-icons/fa";
 
 const FloatingTimer = () => {
   const dispatch = useDispatch();
@@ -28,7 +28,7 @@ const FloatingTimer = () => {
   const cleanup = useCallback(() => {
     if (currentTaskRef.current.id && timeRef.current) {
       dispatch({
-        type: 'global/updateCurrentTask',
+        type: "global/updateCurrentTask",
         payload: {
           ...currentTaskRef.current,
           duration: timeRef.current,
@@ -48,7 +48,7 @@ const FloatingTimer = () => {
   useEffect(() => {
     if (time === 0 && currentTask?.id && timerOn) {
       dispatch({
-        type: 'global/completeCurrentTask',
+        type: "global/completeCurrentTask",
         payload: {
           ...currentTaskRef.current,
           //En cero siempre porque ya se completo la tarea.
@@ -69,15 +69,15 @@ const FloatingTimer = () => {
     if (!dataToSave?.id) return;
 
     local.current = true;
-    localStorage.setItem('master', JSON.stringify(dataToSave));
+    localStorage.setItem("master", JSON.stringify(dataToSave));
   };
 
   useEffect(() => {
     if (local.current) return;
     const handleBeforeUnload = () => saveData();
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
